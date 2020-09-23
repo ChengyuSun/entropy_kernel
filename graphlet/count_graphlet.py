@@ -23,7 +23,7 @@ class GraphletCoder:
         self.graphlet_index_4_3 = self.graphlet_index_4_2 + pow(label_num, 4)
         self.graphlet_index_4_4 = self.graphlet_index_4_3 + pow(label_num, 4)
         self.graphlet_types = self.graphlet_index_4_4 - 1
-        print('all graphlet type is: ',self.graphlet_types)
+        # print('all graphlet type is: ',self.graphlet_types)
         self.graphlet_type_vactor = [0,self.graphlet_index_2, self.graphlet_index_3_1, self.graphlet_index_3_2,
                                      self.graphlet_index_3_3,
                                      self.graphlet_index_4_1, self.graphlet_index_4_2, self.graphlet_index_4_3]
@@ -33,14 +33,14 @@ class GraphletCoder:
 
     def code(self,number_vactor,graphlet_type):
         res = 0
-        print('find '+str(number_vactor)+' of type '+str(graphlet_type))
+        # print('find '+str(number_vactor)+' of type '+str(graphlet_type))
         number_vactor.reverse()
         for index, value in enumerate(number_vactor):
             res += value * pow(self.label_number, index)
 
         r=res+self.graphlet_type_vactor[graphlet_type]
 
-        print('index is '+str(r))
+        # print('index is '+str(r))
         return r
 
     def get_graphlet_types(self):
@@ -107,19 +107,35 @@ def graphlet_diffuse(start_index,adj_original,node_labels,graphlet_coder):
                             adj_original[n1_1][n2_2]==0 and adj_original[start_index][n2_2]==0 :
                         number_vactor_4_4 = [node_labels[start_index], node_labels[n1_2], node_labels[n1_1], node_labels[n2_2]]
                         node_rep[graphlet_coder.code(number_vactor_4_4, 7)] += 1
-    return node_rep
+    return np.array(node_rep)
 
-coder=GraphletCoder(9)
-adj=[[0,1,1,1,0,0,0,0,0],
-     [1,0,1,0,1,0,0,0,0],
-     [1,1,0,0,0,1,0,0,0],
-     [1,0,0,0,0,0,1,0,0],
-     [0,1,0,0,0,0,0,0,0],
-     [0,0,1,0,0,0,0,1,1],
-     [0,0,0,1,0,0,0,0,1],
-     [0,0,0,0,0,1,0,0,0],
-     [0,0,0,0,0,1,1,0,0]]
-node_labels=[0,1,2,3,4,5,6,7,8]
-print(graphlet_diffuse(1,adj,node_labels,coder))
+
+def graph_rep(adj_original,node_labels,label_num):
+    coder=GraphletCoder(label_num)
+    N=len(adj_original)
+    rep_graph=np.zeros(0)
+    for start_index in range(N):
+        rep_node=graphlet_diffuse(start_index,adj_original,node_labels,coder)
+        if start_index==0:
+            rep_graph=rep_node
+        else:
+            rep_graph+=rep_node
+    return  rep_graph
+
+
+
+# coder=GraphletCoder(9)
+# adj=[[0,1,1,1,0,0,0,0,0],
+#      [1,0,1,0,1,0,0,0,0],
+#      [1,1,0,0,0,1,0,0,0],
+#      [1,0,0,0,0,0,1,0,0],
+#      [0,1,0,0,0,0,0,0,0],
+#      [0,0,1,0,0,0,0,1,1],
+#      [0,0,0,1,0,0,0,0,1],
+#      [0,0,0,0,0,1,0,0,0],
+#      [0,0,0,0,0,1,1,0,0]]
+# node_labels=[0,1,2,3,4,5,6,7,8]
+# r=graph_rep(adj,node_labels,9)
+
 
 
