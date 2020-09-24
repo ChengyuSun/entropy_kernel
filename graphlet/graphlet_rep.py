@@ -11,9 +11,9 @@ GRAPH_ID_SUFFIX = '_graph_indicator.txt'
 def complete_path(folder, fname):
     return os.path.join(folder, fname)
 
-def store_graph_rep():
+def graph_reps():
     data = dict()
-    dataset_name = 'MUTAG'
+    dataset_name = 'PTC_FR'
     dirpath = '../data/{}/unzipped/{}'.format(dataset_name, dataset_name)
     for f in os.listdir(dirpath):
         if "README" in f or '.txt' not in f:
@@ -35,27 +35,29 @@ def store_graph_rep():
     edge_index = 0
     node_index_begin = 0
 
-    graph_reps=[]
+    graph_reps_matrix=[]
 
     for g_id in set(graph_ids):
-        print('正在处理图：' + str(g_id))
+        #print('正在处理图：' + str(g_id))
         node_ids = np.argwhere(data['_graph_indicator.txt'] == g_id).squeeze()
         node_ids.sort()
 
         temp_nodN = len(node_ids)
         temp_A = np.zeros([temp_nodN, temp_nodN], int)
-        print('nodN: ', temp_nodN)
+        #print('nodN: ', temp_nodN)
         while (edge_index < len(adj)) and (adj[edge_index][0] - 1 in node_ids):
             temp_A[adj[edge_index][0] - 1 - node_index_begin][adj[edge_index][1] - 1 - node_index_begin] = 1
             edge_index += 1
 
-        print(temp_A)
+        #print(temp_A)
 
         node_labels = data[NODE_LABELS_SUFFIX][node_ids]
         #
         node_index_begin += temp_nodN
 
-        graph_reps.append(graph_rep(temp_A,node_labels,node_label_num))
+        graph_reps_matrix.append(graph_rep(temp_A,node_labels,node_label_num))
 
-    #存储graph_reps
+    return np.array(graph_reps_matrix),data[GRAPH_LABELS_SUFFIX]
+
+
 

@@ -23,7 +23,7 @@ class GraphletCoder:
         self.graphlet_index_4_3 = self.graphlet_index_4_2 + pow(label_num, 4)
         self.graphlet_index_4_4 = self.graphlet_index_4_3 + pow(label_num, 4)
         self.graphlet_types = self.graphlet_index_4_4 - 1
-        # print('all graphlet type is: ',self.graphlet_types)
+        #print('all graphlet type is: ',self.graphlet_types)
         self.graphlet_type_vactor = [0,self.graphlet_index_2, self.graphlet_index_3_1, self.graphlet_index_3_2,
                                      self.graphlet_index_3_3,
                                      self.graphlet_index_4_1, self.graphlet_index_4_2, self.graphlet_index_4_3]
