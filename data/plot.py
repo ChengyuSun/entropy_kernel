@@ -31,7 +31,7 @@ z1 = data1[:, 2]
 fig = plt.figure()
 ax = Axes3D(fig)
 
-colors=['r','k','b']
+colors=['r','k','b','w','y','c']
 
 for index in range(188):
     ax.scatter(x1[index], y1[index], z1[index], c=colors[graph_labels[index]])
