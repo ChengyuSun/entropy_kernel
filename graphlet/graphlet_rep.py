@@ -1,5 +1,5 @@
 import numpy as np
-from graphlet.count_graphlet import graph_rep
+from graphlet.count_graphlet import graph_rep,graph_rep_concat
 import os
 
 GRAPH_LABELS_SUFFIX = '_graph_labels.txt'
@@ -13,7 +13,7 @@ def complete_path(folder, fname):
 
 def graph_reps():
     data = dict()
-    dataset_name = 'PTC_FR'
+    dataset_name = 'MUTAG'
     dirpath = '../data/{}/unzipped/{}'.format(dataset_name, dataset_name)
     for f in os.listdir(dirpath):
         if "README" in f or '.txt' not in f:
@@ -36,6 +36,7 @@ def graph_reps():
     node_index_begin = 0
 
     graph_reps_matrix=[]
+    graph_reps_concat=np.array([])
 
     for g_id in set(graph_ids):
         #print('正在处理图：' + str(g_id))
@@ -55,7 +56,8 @@ def graph_reps():
         #
         node_index_begin += temp_nodN
 
-        graph_reps_matrix.append(graph_rep(temp_A,node_labels,node_label_num))
+        #graph_reps_matrix.append(graph_rep(temp_A,node_labels,node_label_num))
+        graph_reps_matrix.append(graph_rep_concat(temp_A,node_labels,node_label_num))
 
     return np.array(graph_reps_matrix),data[GRAPH_LABELS_SUFFIX]
 

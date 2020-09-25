@@ -7,9 +7,9 @@ from data.kPCA import rbf_kpca
 
 
 graph_rep_matrix,graph_labels=graph_reps()
+print('before pca shape: ',graph_rep_matrix.shape)
 data1 = rbf_kpca(graph_rep_matrix, gamma=15, k=3)
-
-print('shape: ',data1.shape)
+print(' after pca shape: ',data1.shape)
 
 # 数据１
 #data1 = np.arange(24).reshape((8, 3))
@@ -35,6 +35,7 @@ colors=['r','k','b','w','y','c']
 
 for index in range(188):
     ax.scatter(x1[index], y1[index], z1[index], c=colors[graph_labels[index]])
+    #plt.scatter(x1[index], y1[index], c=colors[graph_labels[index]])
 
 
 # 绘制图例

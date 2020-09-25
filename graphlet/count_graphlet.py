@@ -122,6 +122,14 @@ def graph_rep(adj_original,node_labels,label_num):
             rep_graph+=rep_node
     return  rep_graph
 
+def graph_rep_concat(adj_original,node_labels,label_num):
+    degree_rank = np.argsort(sum(np.transpose(adj_original)))
+    coder = GraphletCoder(label_num)
+    rep_graph = np.array([])
+    for index in range(10):
+        rep_node = graphlet_diffuse(degree_rank[index], adj_original, node_labels, coder)
+        rep_graph=np.append(rep_graph,rep_node)
+    return rep_graph
 
 
 # coder=GraphletCoder(9)
