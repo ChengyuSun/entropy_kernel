@@ -18,14 +18,15 @@ def read_adjMatrix(i):  #读取一个图文件，返回matrix和大小
     matrix = np.array(matrix)
     return matrix,N
 
-def count_Motifs(i):
+def count_Motifs(A):
     # A,nodN=read_adjMatrix(i)
+    nodN=len(A)
     rd=np.argsort(sum(np.transpose(A)))
     rdA=A[rd]
     rdA[:,]=rdA[:,rd]
-    A2=np.array(np.ndarray(A)**2)
-    A3=np.array(np.ndarray(A)**3)
-    A4=np.array(np.ndarray(A)**4)
+    A2=(A)**2
+    A3=(A)**3
+    A4=(A)**4
     num_triangle=count_triangle(A3,nodN)
     num_quads=count_quads(A2,A4,nodN)
     Nm_1=count_chain(rdA,nodN,2)
@@ -129,7 +130,7 @@ def count_polygon0(num,edges):
 #         csvWriter.writerow(count_Motifs(i+1))
 #     fc.close
 
-count_Motifs(10)
+#count_Motifs(10)
 
 
 

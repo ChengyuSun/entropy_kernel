@@ -33,7 +33,7 @@ class GraphletCoder:
 
     def code(self,number_vactor,graphlet_type):
         res = 0
-        # print('find '+str(number_vactor)+' of type '+str(graphlet_type))
+        print('find '+str(number_vactor)+' of type '+str(graphlet_type))
         number_vactor.reverse()
         for index, value in enumerate(number_vactor):
             res += value * pow(self.label_number, index)
@@ -126,10 +126,12 @@ def graph_rep_concat(adj_original,node_labels,label_num):
     degree_rank = np.argsort(sum(np.transpose(adj_original)))
     coder = GraphletCoder(label_num)
     rep_graph = np.array([])
-    for index in range(10):
+    for index in range(10):#将degree最大的十个节点表示concat 作为图表示
         rep_node = graphlet_diffuse(degree_rank[index], adj_original, node_labels, coder)
         rep_graph=np.append(rep_graph,rep_node)
     return rep_graph
+
+
 
 
 # coder=GraphletCoder(9)

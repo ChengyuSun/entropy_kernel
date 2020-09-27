@@ -33,7 +33,7 @@ ax = Axes3D(fig)
 
 colors=['r','k','b','w','y','c']
 
-for index in range(188):
+for index in range(len(x1)):
     ax.scatter(x1[index], y1[index], z1[index], c=colors[graph_labels[index]])
     #plt.scatter(x1[index], y1[index], c=colors[graph_labels[index]])
 

@@ -1,5 +1,6 @@
 import numpy as np
 from graphlet.count_graphlet import graph_rep,graph_rep_concat
+from entropy.CountMotif_nr import count_Motifs
 import os
 
 GRAPH_LABELS_SUFFIX = '_graph_labels.txt'
@@ -58,7 +59,7 @@ def graph_reps():
 
         #graph_reps_matrix.append(graph_rep(temp_A,node_labels,node_label_num))
         graph_reps_matrix.append(graph_rep_concat(temp_A,node_labels,node_label_num))
-
+        #graph_reps_matrix.append(count_Motifs(temp_A))
     return np.array(graph_reps_matrix),data[GRAPH_LABELS_SUFFIX]
 
 
