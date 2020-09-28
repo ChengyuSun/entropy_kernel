@@ -4,6 +4,7 @@ import os
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
+from entropy.CountMotif_and_node import count_Motifs
 
 
 GRAPH_LABELS_SUFFIX = '_graph_labels.txt'
@@ -16,7 +17,7 @@ def complete_path(folder, fname):
 
 def ana():
     data = dict()
-    dataset_name='MUTAG'
+    dataset_name='NCI1'
     dirpath = './{}/unzipped/{}'.format(dataset_name,dataset_name)
     for f in os.listdir(dirpath):
         if "README" in f or '.txt' not in f:
@@ -39,25 +40,41 @@ def ana():
     node_index_begin = 0
     b=0
     for g_id in set(graph_ids):
-        print('正在处理图：'+str(g_id))
+        #print('正在处理图：'+str(g_id))
         node_ids = np.argwhere(data['_graph_indicator.txt'] == g_id).squeeze()
         node_ids.sort()
 
         temp_nodN=len(node_ids)
         temp_A=np.zeros([temp_nodN,temp_nodN],int)
-        print('nodN: ',temp_nodN)
+        #print('nodN: ',temp_nodN)
         while (edge_index<len(adj))and(adj[edge_index][0]-1 in node_ids):
             temp_A[adj[edge_index][0]-1-node_index_begin][adj[edge_index][1]-1-node_index_begin]=1
             edge_index+=1
 
-        print(temp_A)
+        #print(temp_A)
 
         node_labels=data[NODE_LABELS_SUFFIX][node_ids]
 
         draw_graph(temp_A,node_labels,temp_nodN,data[GRAPH_LABELS_SUFFIX][g_id])
         #
-        node_index_begin += temp_nodN
 
+
+
+        #num,node_occupation=count_Motifs(temp_A)
+        # print('num: ',num)
+        # print('node_occupation:',node_occupation)
+        # for item in node_occupation:
+        #     stack=[]
+        #     for char in item:
+        #         if char in stack:
+        #             print(g_id)
+        #             print(node_occupation)
+        #         stack.append(char)
+        #     print(stack)
+
+
+        node_index_begin += temp_nodN
+        #
         b+=1
         if b>3:
             break
