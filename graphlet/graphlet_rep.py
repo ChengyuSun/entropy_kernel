@@ -1,5 +1,5 @@
 import numpy as np
-from graphlet.count_graphlet import graph_rep,graph_rep_concat
+from graphlet.count_graphlet import graph_rep_sum,graph_rep_concat
 from entropy.CountMotif_and_node import count_Motifs
 from entropy.Entropy import graphEntropy
 import os
@@ -59,11 +59,11 @@ def graph_reps(dataset):
         #
         node_index_begin += temp_nodN
 
-        #graph_reps_matrix.append(graph_rep(temp_A,node_labels,node_label_num))
+        graph_reps_matrix.append(graph_rep_sum(temp_A,node_labels,node_label_num))
         #graph_reps_matrix.append(graph_rep_concat(temp_A,node_labels,node_label_num))
-        motif_count,_=count_Motifs(temp_A)
-        motif_entropy=graphEntropy(motif_count,temp_nodN)
-        graph_reps_matrix.append(motif_entropy)
+        # motif_count,_=count_Motifs(temp_A)
+        # motif_entropy=graphEntropy(motif_count,temp_nodN)
+        # graph_reps_matrix.append(motif_entropy)
     return np.array(graph_reps_matrix),data[GRAPH_LABELS_SUFFIX]
 
 

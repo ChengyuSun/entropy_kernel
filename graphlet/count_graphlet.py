@@ -110,7 +110,7 @@ def graphlet_diffuse(start_index,adj_original,node_labels,graphlet_coder):
     return np.array(node_rep)
 
 
-def graph_rep(adj_original,node_labels,label_num):
+def graph_rep_sum(adj_original,node_labels,label_num):
     coder=GraphletCoder(label_num)
     N=len(adj_original)
     rep_graph=np.zeros(0)
