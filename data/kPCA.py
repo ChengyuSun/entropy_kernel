@@ -2,7 +2,7 @@
 import numpy as np
 import csv
 from scipy.spatial.distance import pdist, squareform
-from graphlet.graphlet_rep import graph_reps
+from sklearn.decomposition import PCA
 
 #gamma: a free parameter for the RBF kernel
 #k : the number of components to be returned 
@@ -40,8 +40,33 @@ def rbf_kpca(X, gamma, k):
     return np.column_stack((eigen_pairs[i][1] for i in range(k)))
 
 
-# with open('./KPCA_AIDS.csv',"wb") as fc:
-#     csvWriter=csv.writer(fc)
-#     for i in range(len(E_kpca)):
-#         csvWriter.writerow(E_kpca[i])
-#     fc.close()
+def meanX(dataX):
+    return np.mean(dataX,axis=0)
+
+# def pca(XMat, k):
+#     average = meanX(XMat)
+#     m, n = np.shape(XMat)
+#     avgs = np.tile(average, (m, 1))
+#     print(average.shape)
+#     print(avgs.shape)
+#     data_adjust = XMat - avgs
+#     print(data_adjust.shape)
+#     covX = np.cov(data_adjust.T)   #计算协方差矩阵
+#     featValue, featVec=  np.linalg.eig(covX)  #求解协方差矩阵的特征值和特征向量
+#     index = np.argsort(-featValue) #依照featValue进行从大到小排序
+#     finalData = []
+#     # 注意特征向量时列向量。而numpy的二维矩阵(数组)a[m][n]中，a[1]表示第1行值
+#     selectVec = np.matrix(featVec.T[index[:k]])  # 所以这里须要进行转置
+#     finalData = data_adjust * selectVec.T
+#     reconData = (finalData * selectVec) + average
+#
+#     return finalData, reconData
+
+
+
+def pca(origin_matrix,target_dim):
+    pca = PCA(n_components=target_dim)
+    pca.fit(origin_matrix)
+    newX = pca.fit_transform(origin_matrix)  # 降维后的数据
+    # PCA(copy=True, n_components=2, whiten=False)
+    return newX

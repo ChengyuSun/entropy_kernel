@@ -4,6 +4,7 @@ import math
 
 import numpy as np
 from sympy import *
+import math
 
 Nm=8
 
@@ -41,52 +42,40 @@ def devide(N):
 def calEntropy(n,N,dN):
     l = [2, 3, 3, 4, 4, 4, 5, 5]
     e = [1, 2, 3, 3, 3, 4, 4, 4]
-    iso=[1, 3, 1, 12,4, 1,20, 5]
+    iso = [1, 3, 1, 12, 4, 1, 20, 5]
     K = 1.0 / 100000
     T = 100.0
-    DELTA =256
+    DELTA = 256
 
     beta = symbols('BETA')
-    pi=3.1415926
-    Integral=sqrt(beta)*sqrt(pi)*DELTA
-    Entropy=[]
-    r=27.0
+    pi = 3.1415926
+    Integral = sqrt(beta) * sqrt(pi) * DELTA
+    Entropy = []
+    r = 27.0
+    global Nm
     for i in range(Nm):
-        if n[i]==0:
-            Entropy.append(0)
-            continue
-        m_integral=iso[i]*(Integral**e[i])*r**(l[i]-e[i])
+        m_integral = iso[i] * (Integral ** e[i]) * r ** (l[i] - e[i])
         if N - l[i] * n[i] > 0:
-            logZ = n[i] * (log(m_integral) - math.log(n[i]) - l[i] * math.log(l[i]) + 1) + (N - l[i] * n[i]) * (math.log(r)- math.log(N - l[i] * n[i]) +1)
+            logZ = n[i] * (log(m_integral) - log(n[i]) - l[i] * log(l[i]) + 1) + (N - l[i] * n[i]) * (
+                    log(r) - log(N - l[i] * n[i]) + 1)
         else:
             logZ = n[i] * (-math.log(n[i]) + 1 + log(m_integral) - math.log(factorial(l[i])))
-        #print('logz:',logZ)
-        logZ+=math.log(dN)
-        U=diff(logZ,beta)
-        #print('U:',U)
-        E=logZ+U*beta
-        #print('E1:',E)
+        logZ += math.log(dN)
+        U = diff(logZ, beta)
+        E = logZ + U * beta
         E = E.subs(beta, 1.0 / (K * T))
-        #print('E2:',E)
         Entropy.append(E)
     return Entropy
 
 
 def graphEntropy(motifNumber,nodN):
-    dN = read_data(nodN - 1, '../entropy/data2/devide_20000_Nodes.csv')
+    dN = read_data(nodN - 1, '../entropy/file/devide_347_Nodes.csv')
     return calEntropy(motifNumber,nodN,dN)
-#
-# motif_num=[1277, 585, 1166, 295, 371, 1611, 179, 236]
-# graphEntropy(motif_num,3312)
 
-# motif_num_matrix = get_Amount_of_Motif()
+def node_entropy(motif_number,graph_entropy,node_occupation):
+    node_entropy_vactor=[0 for i in range(len(node_occupation))]
+    for index,node in enumerate(node_occupation):
+        for item in node:
+            node_entropy_vactor[index]+=graph_entropy[int(item)]/motif_number[int(item)]
 
-    # with open("E_256_27_1000.csv", "w") as fc:
-    #     csvWriter = csv.writer(fc)
-    #     n = motifNumber
-    #     csvWriter.writerow(calEntropy(n, Nn, dN))
-    #     fc.close()
-
-
-
-
+    return node_entropy_vactor

@@ -1,6 +1,7 @@
 import numpy as np
 from graphlet.count_graphlet import graph_rep,graph_rep_concat
-from entropy.CountMotif_nr import count_Motifs
+from entropy.CountMotif_and_node import count_Motifs
+from entropy.Entropy import graphEntropy
 import os
 
 GRAPH_LABELS_SUFFIX = '_graph_labels.txt'
@@ -12,16 +13,17 @@ GRAPH_ID_SUFFIX = '_graph_indicator.txt'
 def complete_path(folder, fname):
     return os.path.join(folder, fname)
 
-def graph_reps():
+def graph_reps(dataset):
     data = dict()
-    dataset_name = 'MUTAG'
+    dataset_name = str(dataset)
     dirpath = '../data/{}/unzipped/{}'.format(dataset_name, dataset_name)
+    print('reading data...')
     for f in os.listdir(dirpath):
         if "README" in f or '.txt' not in f:
             continue
         fpath = complete_path(dirpath, f)
         suffix = f.replace(dataset_name, '')
-        print(suffix)
+        #print(suffix)
         if 'attributes' in suffix:
             data[suffix] = np.loadtxt(fpath, dtype=np.float, delimiter=',')
         else:
@@ -58,8 +60,10 @@ def graph_reps():
         node_index_begin += temp_nodN
 
         #graph_reps_matrix.append(graph_rep(temp_A,node_labels,node_label_num))
-        graph_reps_matrix.append(graph_rep_concat(temp_A,node_labels,node_label_num))
-        #graph_reps_matrix.append(count_Motifs(temp_A))
+        #graph_reps_matrix.append(graph_rep_concat(temp_A,node_labels,node_label_num))
+        motif_count,_=count_Motifs(temp_A)
+        motif_entropy=graphEntropy(motif_count,temp_nodN)
+        graph_reps_matrix.append(motif_entropy)
     return np.array(graph_reps_matrix),data[GRAPH_LABELS_SUFFIX]
 
 
