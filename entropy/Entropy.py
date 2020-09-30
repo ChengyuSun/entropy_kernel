@@ -64,7 +64,7 @@ def calEntropy(n,N,dN):
         U = diff(logZ, beta)
         E = logZ + U * beta
         E = E.subs(beta, 1.0 / (K * T))
-        Entropy.append(E)
+        Entropy.append(float(E))
     return Entropy
 
 

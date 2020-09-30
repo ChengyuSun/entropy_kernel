@@ -7,7 +7,7 @@ from data.kPCA import rbf_kpca, pca
 # 数据
 
 
-graph_rep_matrix, graph_labels = graph_reps('PTC_FR')
+graph_rep_matrix, graph_labels = graph_reps('NCI1')
 print('before pca shape: ', graph_rep_matrix.shape)
 # data1 = rbf_kpca(graph_rep_matrix, gamma=15, k=3)
 data1 = pca(graph_rep_matrix, 3)

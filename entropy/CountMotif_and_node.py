@@ -106,6 +106,7 @@ def count_Motifs(A):
     nodN = len(A)
     node_occupation = ['' for i in range(nodN)]
     rd = np.argsort(sum(np.transpose(A)))
+    #node按照degree升序排列
     rdA = A[rd]
     rdA[:, ] = rdA[:, rd]
 
@@ -118,4 +119,11 @@ def count_Motifs(A):
     Nm_7 = count_chain(rdA, nodN, 5, node_occupation, 7)
     Nm_8 = count_star(rdA, nodN, 4, node_occupation, 8)
     num = [Nm_1, Nm_2, Nm_3, Nm_4, Nm_5, Nm_6, Nm_7, Nm_8]
-    return num,node_occupation
+
+    #将node顺序复原
+    node_occupation_new=['' for i in range(nodN)]
+    for index in range(nodN):
+        index_new=np.where(rd==index)[0][0]
+        node_occupation_new[index]=node_occupation[index_new]
+
+    return num,node_occupation_new

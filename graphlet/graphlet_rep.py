@@ -59,12 +59,37 @@ def graph_reps(dataset):
         #
         node_index_begin += temp_nodN
 
-        graph_reps_matrix.append(graph_rep_sum(temp_A,node_labels,node_label_num))
-        #graph_reps_matrix.append(graph_rep_concat(temp_A,node_labels,node_label_num))
+        #graph_reps_matrix.append(graph_rep_sum(temp_A,node_labels,node_label_num))
+        graph_reps_matrix.append(graph_rep_concat(temp_A,node_labels,node_label_num))
         # motif_count,_=count_Motifs(temp_A)
         # motif_entropy=graphEntropy(motif_count,temp_nodN)
         # graph_reps_matrix.append(motif_entropy)
     return np.array(graph_reps_matrix),data[GRAPH_LABELS_SUFFIX]
+
+
+def read_adjMatrix(file_index):
+    array = open('D:/PycharmProjects/motif/undirected-motif-entropy/data/graph'+str(file_index+1)+'.csv').readlines()
+    N = len(array)
+    matrix = []
+    for line in array:
+        line = line.strip('\r\n').split(',')
+        line = [int(float(x)) for x in line]
+        matrix.append(line)
+    matrix = np.array(matrix)
+    return matrix,N
+
+def store_count_and_entropy():
+    f1=open("../data/finacial/motif_count.txt", "w")
+    f2=open("../data/finacial/graph_entropy.txt", "w")
+    for file_index in range(5976):
+        print(file_index)
+        matrix,nodN=read_adjMatrix(file_index)
+        motif_count, _ = count_Motifs(matrix)
+        f1.write(str(motif_count)+'\n')
+        graph_entropy = graphEntropy(motif_count, nodN)
+        f2.write(str(graph_entropy)+'\n')
+
+store_count_and_entropy()
 
 
 
