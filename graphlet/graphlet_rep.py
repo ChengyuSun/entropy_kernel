@@ -89,7 +89,9 @@ def store_count_and_entropy():
         graph_entropy = graphEntropy(motif_count, nodN)
         f2.write(str(graph_entropy)+'\n')
 
-store_count_and_entropy()
+#store_count_and_entropy()
+
+
 
 
 
