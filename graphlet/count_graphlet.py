@@ -125,7 +125,9 @@ def graph_rep_sum(adj_original,node_labels,label_num):
 def graph_rep_concat(adj_original,node_labels,label_num):
     degree_rank = np.argsort(sum(np.transpose(adj_original)))
     coder = GraphletCoder(label_num)
-
+    degree_list=list(degree_rank)
+    degree_list.reverse()
+    degree_rank=np.array(degree_list)
     rep_node_0=graphlet_diffuse(degree_rank[0], adj_original, node_labels, coder)
     rep_graph = np.array([rep_node_0])
     rep_node_len=len(rep_node_0)

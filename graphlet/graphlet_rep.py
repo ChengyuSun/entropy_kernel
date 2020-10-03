@@ -89,9 +89,23 @@ def store_count_and_entropy():
         graph_entropy = graphEntropy(motif_count, nodN)
         f2.write(str(graph_entropy)+'\n')
 
-#store_count_and_entropy()
+def store_matrix(matrix,filename):
+    f1 = open(filename, "w")
+    for line in matrix:
+        for item in line:
+            f1.write(str(item) + ',')
+        f1.write('\n')
 
 
+def read_data(filename='../data/finacial/log10E_256_27_1000.csv'):
+    array = open(filename).readlines()
+    matrix = []
+    for line in array:
+        line = line.strip('\r\n[]').split(',')
+        line = [float(x) for x in line]
+        matrix.append(line)
+    matrix = np.array(matrix)
+    return matrix
 
 
 

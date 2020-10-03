@@ -5,13 +5,11 @@ from graphlet.graphlet_rep import graph_reps,store_matrix,read_data
 from data.kPCA import rbf_kpca, pca
 
 
-
-#graph_rep_matrix, graph_labels = graph_reps('NCI1')
 graph_rep_matrix=read_data(filename='../data/finacial/KPCA.csv')
 print('before pca shape: ', graph_rep_matrix.shape)
 #data1 = rbf_kpca(graph_rep_matrix, gamma=15, k=3)
 #data1 = pca(graph_rep_matrix, 3)
-#store_matrix(data1,'../data/finacial/NCI1_graphlet_count_pca.txt')
+
 data1=graph_rep_matrix
 print(' after pca shape: ', data1.shape)
 
@@ -39,17 +37,6 @@ ax.scatter(data1[y==3, 0], data1[y==3, 1], data1[y==3, 2], c='b', marker='^', la
 ax.scatter(data1[y==4, 0], data1[y==4, 1], data1[y==4, 2], c='r', marker='^', label='Subprime Mortgage Crisis',s=40)
 ax.scatter(data1[y==5, 0], data1[y==5, 1], data1[y==5, 2], c='m', marker='^', label='Bankrauptcy of Lehman Brothers',s=40)
 ax.scatter(data1[y==0, 0], data1[y==0, 1], data1[y==0, 2], c='c', marker='o', label='background', s=5,alpha=.1)
-
-
-#
-#
-# ax.scatter(data1[graph_labels==1, 0], data1[graph_labels==1, 1], data1[graph_labels==1, 2],
-#            c='r', marker='^',s=40)
-#
-# ax.scatter(data1[graph_labels==0, 0], data1[graph_labels==0, 1], data1[graph_labels==0, 2],
-#            c='b', marker='o',s=40)
-
-
 
 
 # 绘制图例
