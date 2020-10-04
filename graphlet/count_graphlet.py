@@ -123,14 +123,17 @@ def graph_rep_sum(adj_original,node_labels,label_num):
     return  rep_graph
 
 def graph_rep_concat(adj_original,node_labels,label_num):
+    #按照degree升序排列并反转为降序排列
     degree_rank = np.argsort(sum(np.transpose(adj_original)))
     coder = GraphletCoder(label_num)
     degree_list=list(degree_rank)
     degree_list.reverse()
     degree_rank=np.array(degree_list)
+
     rep_node_0=graphlet_diffuse(degree_rank[0], adj_original, node_labels, coder)
     rep_graph = np.array([rep_node_0])
     rep_node_len=len(rep_node_0)
+
     for index in range(1,10):#将degree最大的十个节点表示concat 作为图表示
         if index<len(degree_rank):
             rep_node = graphlet_diffuse(degree_rank[index], adj_original, node_labels, coder)

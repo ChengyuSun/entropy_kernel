@@ -3,6 +3,8 @@ from graphlet.count_graphlet import graph_rep_sum,graph_rep_concat
 from entropy.CountMotif_and_node import count_Motifs
 from entropy.Entropy import graphEntropy
 import os
+from data.kPCA import rbf_kpca
+import math
 
 GRAPH_LABELS_SUFFIX = '_graph_labels.txt'
 NODE_LABELS_SUFFIX = '_node_labels.txt'
@@ -13,10 +15,16 @@ GRAPH_ID_SUFFIX = '_graph_indicator.txt'
 def complete_path(folder, fname):
     return os.path.join(folder, fname)
 
+def read_graph_label(dataset):
+    filename='../data/{}/{}_graph_labels.txt'.format(dataset,dataset)
+    print('reading data labels...')
+    graph_labels = np.loadtxt(filename, dtype=np.float, delimiter=',')
+    return graph_labels
+
 def graph_reps(dataset):
     data = dict()
     dataset_name = str(dataset)
-    dirpath = '../data/{}/unzipped/{}'.format(dataset_name, dataset_name)
+    dirpath = '../data/{}'.format(dataset_name)
     print('reading data...')
     for f in os.listdir(dirpath):
         if "README" in f or '.txt' not in f:
@@ -41,8 +49,9 @@ def graph_reps(dataset):
     graph_reps_matrix=[]
     graph_reps_concat=np.array([])
 
+    f_NCI1 = open("../data/processed/NCI1_graphlet_count_concat", "w")
     for g_id in set(graph_ids):
-        #print('正在处理图：' + str(g_id))
+        print('正在处理图：' + str(g_id))
         node_ids = np.argwhere(data['_graph_indicator.txt'] == g_id).squeeze()
         node_ids.sort()
 
@@ -60,10 +69,15 @@ def graph_reps(dataset):
         node_index_begin += temp_nodN
 
         #graph_reps_matrix.append(graph_rep_sum(temp_A,node_labels,node_label_num))
-        graph_reps_matrix.append(graph_rep_concat(temp_A,node_labels,node_label_num))
+        #graph_reps_matrix.append(graph_rep_concat(temp_A,node_labels,node_label_num))
+
+        f_NCI1.write(str(graph_rep_concat(temp_A,node_labels,node_label_num)))
+
         # motif_count,_=count_Motifs(temp_A)
         # motif_entropy=graphEntropy(motif_count,temp_nodN)
         # graph_reps_matrix.append(motif_entropy)
+
+
     return np.array(graph_reps_matrix),data[GRAPH_LABELS_SUFFIX]
 
 
@@ -79,8 +93,8 @@ def read_adjMatrix(file_index):
     return matrix,N
 
 def store_count_and_entropy():
-    f1=open("../data/finacial/motif_count.txt", "w")
-    f2=open("../data/finacial/graph_entropy.txt", "w")
+    f1=open("../data/processed/motif_count.txt", "w")
+    f2=open("../data/processed/graph_entropy.txt", "w")
     for file_index in range(5976):
         print(file_index)
         matrix,nodN=read_adjMatrix(file_index)
@@ -97,15 +111,15 @@ def store_matrix(matrix,filename):
         f1.write('\n')
 
 
-def read_data(filename='../data/finacial/log10E_256_27_1000.csv'):
+def read_data(filename):
     array = open(filename).readlines()
     matrix = []
     for line in array:
-        line = line.strip('\r\n[]').split(',')
+        line = line.strip('\r\n[],').split(',')
         line = [float(x) for x in line]
         matrix.append(line)
     matrix = np.array(matrix)
     return matrix
 
-
+graph_reps('NCI1')
 

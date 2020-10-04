@@ -28,7 +28,7 @@ def count_star(A, N, neiN, node_occupation, motif):
     return n
 
 
-def find_next(a, N, i, rest, stack):
+def find_next(a,i, rest, stack):
     if rest == 0:
         return 1
 
@@ -37,7 +37,7 @@ def find_next(a, N, i, rest, stack):
     for next_index in next_index_list:
         if next_index not in stack:
             stack.append(next_index)
-            if find_next(a, N, next_index, rest - 1, stack) > 0:
+            if find_next(a, next_index, rest - 1, stack) > 0:
                 return 1
 
     stack.pop()
@@ -49,7 +49,7 @@ def count_chain(A, N, len, node_occupation, motif):
     a = copy.copy(A)
     for i in range(N):
         stack = [i]
-        if find_next(a, N, i, len - 1, stack) > 0:
+        if find_next(a, i, len - 1, stack) > 0:
             #print('find chain ', stack)
             for j in stack:
                 node_occupation[j] += str(motif)
