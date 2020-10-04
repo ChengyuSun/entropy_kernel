@@ -1,6 +1,12 @@
-import numpy as np
+import os
 import sys
-sys.path.append('../')
+rootpath=str("/home/scy/entropy_kernel")
+syspath=sys.path
+sys.path=[]
+sys.path.append(rootpath)#将工程根目录加入到python搜索路径中
+sys.path.extend([rootpath+i for i in os.listdir(rootpath) if i[0]!="."])#将工程目录下的一级目录添加到python搜索路径中
+sys.path.extend(syspath)
+import numpy as np
 from graphlet.count_graphlet import graph_rep_sum,graph_rep_concat
 from entropy.CountMotif_and_node import count_Motifs
 from entropy.Entropy import graphEntropy
