@@ -1,4 +1,6 @@
 import numpy as np
+import sys
+sys.path.append('../')
 from graphlet.count_graphlet import graph_rep_sum,graph_rep_concat
 from entropy.CountMotif_and_node import count_Motifs
 from entropy.Entropy import graphEntropy
