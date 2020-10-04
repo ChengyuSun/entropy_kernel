@@ -1,9 +1,18 @@
+import os
+import sys
+rootpath=str("/home/scy/entropy_kernel")
+syspath=sys.path
+sys.path=[]
+sys.path.append(rootpath)#将工程根目录加入到python搜索路径中
+sys.path.extend([rootpath+i for i in os.listdir(rootpath) if i[0]!="."])#将工程目录下的一级目录添加到python搜索路径中
+sys.path.extend(syspath)
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D  # 空间三维画图
 from graphlet.graphlet_rep import graph_reps,store_matrix,read_data,read_graph_label
-from data.kPCA import rbf_kpca
-
+from data.kPCA import rbf_kpca,pca
 
 
 graph_rep_matrix, graph_labels = graph_reps('MUTAG')
@@ -13,8 +22,8 @@ print('before pca shape: ', graph_rep_matrix.shape)
 
 
 #data1 = rbf_kpca(graph_rep_matrix, gamma=15, k=3)
-#data1 = pca(graph_rep_matrix, 3)
-data1=graph_rep_matrix
+data1 = pca(graph_rep_matrix, 3)
+#data1=graph_rep_matrix
 
 print(' after pca shape: ', data1.shape)
 

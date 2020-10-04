@@ -55,7 +55,6 @@ def graph_reps(dataset):
     node_index_begin = 0
 
     graph_reps_matrix=[]
-    graph_reps_concat=np.array([])
 
     f_NCI1 = open("/new_disk_B/scy/processed/NCI1_graphlet_count_concat.txt", "w")
     for g_id in set(graph_ids):
@@ -80,6 +79,7 @@ def graph_reps(dataset):
         #graph_reps_matrix.append(graph_rep_concat(temp_A,node_labels,node_label_num))
 
         f_NCI1.write(str(graph_rep_concat(temp_A,node_labels,node_label_num)))
+        f_NCI1.write('\n')
 
         # motif_count,_=count_Motifs(temp_A)
         # motif_entropy=graphEntropy(motif_count,temp_nodN)

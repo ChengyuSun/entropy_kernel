@@ -2,7 +2,7 @@
 import numpy as np
 import csv
 from scipy.spatial.distance import pdist, squareform
-#from sklearn.decomposition import PCA
+from sklearn.decomposition import PCA
 
 #gamma: a free parameter for the RBF kernel
 #k : the number of components to be returned 
@@ -64,9 +64,9 @@ def meanX(dataX):
 
 
 
-# def pca(origin_matrix,target_dim):
-#     pca = PCA(n_components=target_dim)
-#     pca.fit(origin_matrix)
-#     newX = pca.fit_transform(origin_matrix)  # 降维后的数据
-#     # PCA(copy=True, n_components=2, whiten=False)
-#     return newX
+def pca(origin_matrix,target_dim):
+    pca = PCA(n_components=target_dim)
+    pca.fit(origin_matrix)
+    newX = pca.fit_transform(origin_matrix)  # 降维后的数据
+    # PCA(copy=True, n_components=2, whiten=False)
+    return newX
