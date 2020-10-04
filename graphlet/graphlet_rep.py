@@ -24,7 +24,7 @@ def read_graph_label(dataset):
 def graph_reps(dataset):
     data = dict()
     dataset_name = str(dataset)
-    dirpath = '../data/{}'.format(dataset_name)
+    dirpath = '/new_disk_B/scy/{}'.format(dataset_name)
     print('reading data...')
     for f in os.listdir(dirpath):
         if "README" in f or '.txt' not in f:
@@ -49,7 +49,7 @@ def graph_reps(dataset):
     graph_reps_matrix=[]
     graph_reps_concat=np.array([])
 
-    f_NCI1 = open("../data/processed/NCI1_graphlet_count_concat", "w")
+    f_NCI1 = open("/new_disk_B/scy/processed/NCI1_graphlet_count_concat.txt", "w")
     for g_id in set(graph_ids):
         print('正在处理图：' + str(g_id))
         node_ids = np.argwhere(data['_graph_indicator.txt'] == g_id).squeeze()
