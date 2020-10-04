@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D  # 空间三维画图
 from graphlet.graphlet_rep import graph_reps,store_matrix,read_data,read_graph_label
-from data.kPCA import rbf_kpca, pca
+from data.kPCA import rbf_kpca
 
 
 
@@ -13,8 +13,8 @@ print('before pca shape: ', graph_rep_matrix.shape)
 
 
 #data1 = rbf_kpca(graph_rep_matrix, gamma=15, k=3)
-data1 = pca(graph_rep_matrix, 3)
-#data1=graph_rep_matrix
+#data1 = pca(graph_rep_matrix, 3)
+data1=graph_rep_matrix
 
 print(' after pca shape: ', data1.shape)
 
