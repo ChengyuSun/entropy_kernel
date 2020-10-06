@@ -1,11 +1,14 @@
-import os
-import sys
-rootpath=str("/home/scy/entropy_kernel")
-syspath=sys.path
-sys.path=[]
-sys.path.append(rootpath)
-sys.path.extend([rootpath+i for i in os.listdir(rootpath) if i[0]!="."])
-sys.path.extend(syspath)
+# import os
+# import sys
+# rootpath=str("/home/scy/entropy_kernel")
+# syspath=sys.path
+# sys.path=[]
+# sys.path.append(rootpath)
+# sys.path.extend([rootpath+i for i in os.listdir(rootpath) if i[0]!="."])
+# sys.path.extend(syspath)
+
+
+
 import numpy as np
 from graphlet.count_graphlet import graph_rep_sum,graph_rep_concat
 from entropy.CountMotif_and_node import count_Motifs
@@ -32,7 +35,8 @@ def read_graph_label(dataset):
 def graph_reps(dataset):
     data = dict()
     dataset_name = str(dataset)
-    dirpath = '/new_disk_B/scy/{}'.format(dataset_name)
+    #dirpath = '/new_disk_B/scy/{}'.format(dataset_name)
+    dirpath = '../data/{}'.format(dataset_name)
     print('reading data...')
     for f in os.listdir(dirpath):
         if "README" in f or '.txt' not in f:
@@ -56,7 +60,10 @@ def graph_reps(dataset):
 
     graph_reps_matrix=[]
 
-    f_NCI1 = open("/new_disk_B/scy/processed/NCI1_graphlet_count_concat.txt", "w")
+    #f_NCI1 = open("/new_disk_B/scy/processed/NCI1_graphlet_count_concat.txt", "w")
+    f1 = open("../data/processed/{}_motif_count.txt".format(dataset), "w")
+    f2 = open("../data/processed/{}_graph_entropy.txt".format(dataset), "w")
+
     for g_id in set(graph_ids):
         print('正在处理图：' + str(g_id))
         node_ids = np.argwhere(data['_graph_indicator.txt'] == g_id).squeeze()
@@ -78,14 +85,18 @@ def graph_reps(dataset):
         #graph_reps_matrix.append(graph_rep_sum(temp_A,node_labels,node_label_num))
         #graph_reps_matrix.append(graph_rep_concat(temp_A,node_labels,node_label_num))
 
-        f_NCI1.write(str(graph_rep_concat(temp_A,node_labels,node_label_num)))
-        f_NCI1.write('\n')
+        # f_NCI1.write(str(graph_rep_concat(temp_A,node_labels,node_label_num)))
+        # f_NCI1.write('\n')
+
+        motif_count, _ = count_Motifs(temp_A)
+        f1.write(str(motif_count) + '\n')
+        graph_entropy = graphEntropy(motif_count, temp_nodN)
+        f2.write(str(graph_entropy) + '\n')
 
         # motif_count,_=count_Motifs(temp_A)
         # motif_entropy=graphEntropy(motif_count,temp_nodN)
         # graph_reps_matrix.append(motif_entropy)
 
-        break
     return np.array(graph_reps_matrix),data[GRAPH_LABELS_SUFFIX]
 
 
@@ -100,16 +111,6 @@ def read_adjMatrix(file_index):
     matrix = np.array(matrix)
     return matrix,N
 
-def store_count_and_entropy():
-    f1=open("../data/processed/motif_count.txt", "w")
-    f2=open("../data/processed/graph_entropy.txt", "w")
-    for file_index in range(5976):
-        print(file_index)
-        matrix,nodN=read_adjMatrix(file_index)
-        motif_count, _ = count_Motifs(matrix)
-        f1.write(str(motif_count)+'\n')
-        graph_entropy = graphEntropy(motif_count, nodN)
-        f2.write(str(graph_entropy)+'\n')
 
 def store_matrix(matrix,filename):
     f1 = open(filename, "w")
@@ -128,6 +129,4 @@ def read_data(filename):
         matrix.append(line)
     matrix = np.array(matrix)
     return matrix
-
-graph_reps('NCI1')
 

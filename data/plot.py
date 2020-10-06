@@ -1,11 +1,11 @@
-import os
-import sys
-rootpath=str("/home/scy/entropy_kernel")
-syspath=sys.path
-sys.path=[]
-sys.path.append(rootpath)#将工程根目录加入到python搜索路径中
-sys.path.extend([rootpath+i for i in os.listdir(rootpath) if i[0]!="."])#将工程目录下的一级目录添加到python搜索路径中
-sys.path.extend(syspath)
+# import os
+# import sys
+# rootpath=str("/home/scy/entropy_kernel")
+# syspath=sys.path
+# sys.path=[]
+# sys.path.append(rootpath)
+# sys.path.extend([rootpath+i for i in os.listdir(rootpath) if i[0]!="."])
+# sys.path.extend(syspath)
 
 
 import numpy as np
@@ -15,9 +15,9 @@ from graphlet.graphlet_rep import graph_reps,store_matrix,read_data,read_graph_l
 from data.kPCA import rbf_kpca,pca
 
 
-graph_rep_matrix, graph_labels = graph_reps('MUTAG')
-# graph_rep_matrix=read_data(filename='../data/processed/PTC_graphlet_count_pca.txt')
-# graph_labels=read_graph_label('PTC_FR')
+#graph_rep_matrix, graph_labels = graph_reps('NCI1')
+graph_rep_matrix=read_data(filename='../data/processed/NCI1_graph_entropy.txt')
+graph_labels=read_graph_label('NCI1')
 print('before pca shape: ', graph_rep_matrix.shape)
 
 
@@ -58,7 +58,7 @@ ax = Axes3D(fig)
 ax.scatter(data1[graph_labels==1, 0], data1[graph_labels==1, 1], data1[graph_labels==1, 2],
            c='r', marker='^',s=40)
 
-ax.scatter(data1[graph_labels==-1, 0], data1[graph_labels==-1, 1], data1[graph_labels==-1, 2],
+ax.scatter(data1[graph_labels==0, 0], data1[graph_labels==0, 1], data1[graph_labels==0, 2],
            c='b', marker='o',s=40)
 
 
