@@ -121,21 +121,21 @@ def graphlet_diffuse_no_label(start_index,adj_original):
         if start_index in neighbors_2:
             neighbors_2.remove(start_index)
         for index_2_1,n2_3 in enumerate(neighbors_2):
-            #3_1
+
             if adj_original[start_index][n2_3]==0:
+                #3_1
                 node_rep[1] += 1
-                for n2_4 in neighbors_2[index_2_1+1:]:
-                    #4_2
-                    node_rep[5] += 1
+                #4_2
+                node_rep[5] +=len(neighbors_2[index_2_1+1:])
 
             neighbors_3=np.nonzero(adj_original[n2_3])[0].tolist()
             if start_index in neighbors_3:
                 neighbors_3.remove(start_index)
             if n1_1 in neighbors_3:
                 neighbors_3.remove(n1_1)
-            for n3_1 in neighbors_3:
-                #4_1
-                node_rep[4] += 1
+             # 4_1
+            node_rep[4] += len(neighbors_3)
+
 
 
         for index_1_2,n1_2 in enumerate(neighbors_1[index_1_1+1:]):
@@ -183,19 +183,23 @@ def graph_rep_concat(adj_original,node_labels,label_num):
     degree_rank=np.array(degree_list)
 
     rep_node_0=graphlet_diffuse(degree_rank[0], adj_original, node_labels, coder)
-    #rep_node_0=graphlet_diffuse_no_label(degree_rank[0],adj_original)
     rep_graph = np.array([rep_node_0])
     rep_node_len=len(rep_node_0)
 
     for index in range(1,10):#将degree最大的十个节点表示concat 作为图表示
         if index<len(degree_rank):
             rep_node = graphlet_diffuse(degree_rank[index], adj_original, node_labels, coder)
-            #rep_node=graphlet_diffuse_no_label(degree_rank[index],adj_original)
             rep_graph=np.append(rep_graph,rep_node)
         else:
             rep_graph = np.append(rep_graph, np.zeros(rep_node_len,int))
     return rep_graph
 
+
+def graphlet_matrix(adj_original,nodN):
+    result=[]
+    for index in range(nodN):
+        result.append(graphlet_diffuse_no_label(index,adj_original))
+    return np.array(result)
 
 
 

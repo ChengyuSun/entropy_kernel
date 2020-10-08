@@ -11,7 +11,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D  # 空间三维画图
-from graphlet.graphlet_rep import graph_reps,store_matrix,read_data,read_graph_label
+from graphlet.graphlet_rep import graph_reps
+from utils.util import store_matrix,read_data,read_graph_label
 from data.kPCA import rbf_kpca,pca
 
 
