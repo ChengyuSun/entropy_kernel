@@ -195,12 +195,33 @@ def graph_rep_concat(adj_original,node_labels,label_num):
     return rep_graph
 
 
-def graphlet_matrix(adj_original,nodN):
-    result=[]
+def graphlet_matrix(adj_original,nodN,temp_node_labels,min_label,max_label):
+    graph_matrix=[]
+    graph_rep=np.array([])
     for index in range(nodN):
-        result.append(graphlet_diffuse_no_label(index,adj_original))
-    return np.array(result)
+        graph_matrix.append(graphlet_diffuse_no_label(index,adj_original))
 
+    graph_matrix=np.array(graph_matrix)
+
+    _,dim=graph_matrix.shape
+
+    #print('graph_matrix.shape: ',graph_matrix.shape)
+
+    for temp_label in range(min_label,max_label+1):
+        nodes_reps=graph_matrix[temp_node_labels==temp_label]
+        #print('label '+str(temp_label)+' has nodes '+str(nodes_reps.shape))
+        summation=np.sum(nodes_reps,axis=0).reshape(1,dim)
+        is_zero=True
+        for i in range(dim):
+            if summation[0][i] !=0:
+                is_zero=False
+                break
+        if is_zero:
+            #print('seems like zeros!')
+            summation=np.zeros(dim).reshape(1,dim)
+        graph_rep=np.append(graph_rep,summation[0])
+
+    return graph_rep
 
 
 # coder=GraphletCoder(9)

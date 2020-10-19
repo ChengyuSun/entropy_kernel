@@ -17,8 +17,8 @@ def complete_path(folder, fname):
 
 def ana():
     data = dict()
-    dataset_name='NCI1'
-    dirpath = './{}/unzipped/{}'.format(dataset_name,dataset_name)
+    dataset_name='MUTAG'
+    dirpath = '../data/{}'.format(dataset_name)
     for f in os.listdir(dirpath):
         if "README" in f or '.txt' not in f:
             continue
