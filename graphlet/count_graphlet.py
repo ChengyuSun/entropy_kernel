@@ -1,6 +1,7 @@
 import copy
 import numpy as np
-#import entropy.utils as utils
+import utils.util as util
+
 class GraphletCoder:
     label_number=0
     graphlet_index_2 =0
@@ -224,18 +225,49 @@ def graphlet_matrix(adj_original,nodN,temp_node_labels,min_label,max_label):
     return graph_rep
 
 
-# coder=GraphletCoder(9)
-# adj=[[0,1,1,1,0,0,0,0,0],
-#      [1,0,1,0,1,0,0,0,0],
-#      [1,1,0,0,0,1,0,0,0],
-#      [1,0,0,0,0,0,1,0,0],
-#      [0,1,0,0,0,0,0,0,0],
-#      [0,0,1,0,0,0,0,1,1],
-#      [0,0,0,1,0,0,0,0,1],
-#      [0,0,0,0,0,1,0,0,0],
-#      [0,0,0,0,0,1,1,0,0]]
-# node_labels=[0,1,2,3,4,5,6,7,8]
-# r=graph_rep(adj,node_labels,9)
 
+GRAPH_LABELS_SUFFIX = '_graph_labels.txt'
+NODE_LABELS_SUFFIX = '_node_labels.txt'
+ADJACENCY_SUFFIX = '_A.txt'
+GRAPH_ID_SUFFIX = '_graph_indicator.txt'
+
+
+def dataset_graph_reps(dataset):
+
+    data=util.read_data_txt(dataset)
+    graph_ids = set(data['_graph_indicator.txt'])
+    min_label=min(data[NODE_LABELS_SUFFIX])
+    max_label = max(data[NODE_LABELS_SUFFIX])
+    node_label_num =  max_label-min_label + 1
+    print('node labels number: ', node_label_num)
+
+    adj = data[ADJACENCY_SUFFIX]
+    edge_index = 0
+    node_index_begin = 0
+
+
+    f = open("../data/processed/{}_graphlet_count.txt".format(dataset), "w")
+
+    dataset_graph_reps=[]
+
+    for g_id in set(graph_ids):
+        #print('正在处理图：' + str(g_id))
+        node_ids = np.argwhere(data['_graph_indicator.txt'] == g_id).squeeze()
+        node_ids.sort()
+
+        temp_nodN = len(node_ids)
+        temp_A = np.zeros([temp_nodN, temp_nodN], int)
+        while (edge_index < len(adj)) and (adj[edge_index][0] - 1 in node_ids):
+            temp_A[adj[edge_index][0] - 1 - node_index_begin][adj[edge_index][1] - 1 - node_index_begin] = 1
+            edge_index += 1
+
+        temp_node_labels=data[NODE_LABELS_SUFFIX][node_index_begin:node_index_begin+temp_nodN]
+
+        temp_graph_rep=graphlet_matrix(temp_A,temp_nodN,temp_node_labels,min_label,max_label)
+        dataset_graph_reps.append(temp_graph_rep)
+
+        node_index_begin += temp_nodN
+
+    return np.array(dataset_graph_reps)
 
 

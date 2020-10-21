@@ -13,12 +13,12 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D  # 空间三维画图
 from utils.util import store_matrix,read_data,read_graph_label
 from data.kPCA import rbf_kpca,pca
-from graphlet.graphlet_rep import graph_reps
+from graphlet.count_graphlet import dataset_graph_reps
 
 dataset='NCI1'
 
 
-graph_rep_matrix=graph_reps(dataset)
+graph_rep_matrix=dataset_graph_reps(dataset)
 graph_labels=read_graph_label(dataset)
 print('before pca shape: ', graph_rep_matrix.shape)
 
