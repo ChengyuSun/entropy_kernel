@@ -8,7 +8,7 @@ import numpy as np
 import random
 
 
-dataset='NCI1'
+dataset='PTC_FR'
 train_pixel=dataset_reps(dataset)
 train_label=read_graph_label(dataset)
 

@@ -92,6 +92,9 @@ def graphlet_entropy(n):
     r = 27.0
     global Nm
     for i in range(Nm):
+        if n[i]==0:
+            Entropy.append(float(0))
+            continue
         m_integral = (Integral ** e[i]) * r ** (l[i] - e[i])
         logZ = n[i] * (-math.log(n[i]) + 1 + log(m_integral) - math.log(factorial(l[i])))
         U = diff(logZ, beta)
