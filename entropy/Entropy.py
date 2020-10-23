@@ -90,13 +90,13 @@ def graphlet_entropy(n):
     Integral = sqrt(beta) * sqrt(pi) * DELTA
     Entropy = []
     r = 27.0
-    global Nm
+    Nm=len(n)
     for i in range(Nm):
         if n[i]==0:
             Entropy.append(float(0))
             continue
-        m_integral = (Integral ** e[i]) * r ** (l[i] - e[i])
-        logZ = n[i] * (-math.log(n[i]) + 1 + log(m_integral) - math.log(factorial(l[i])))
+        m_integral = (Integral ** e[i%8]) * r ** (l[i%8] - e[i%8])
+        logZ = n[i] * (-math.log(n[i]) + 1 + log(m_integral) - math.log(factorial(l[i%8])))
         U = diff(logZ, beta)
         E = logZ + U * beta
         E = E.subs(beta, 1.0 / (K * T))

@@ -2,6 +2,7 @@ import copy
 import numpy as np
 import utils.util as util
 from entropy.Entropy import graphlet_entropy
+import math
 
 class GraphletCoder:
     label_number=0
@@ -222,12 +223,18 @@ def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
         if is_zero:
             summation=np.zeros(dim).reshape(1,dim)
 
-        temp_entropy=[]
-        for j in range(dim):
-            temp_entropy.append(graph_entropy[j]*summation[0][j]/graphlet_of_graph[j])
-        graph_rep=np.append(graph_rep,np.array(temp_entropy))
+        # temp_entropy=[]
+        # for j in range(dim):
+        #     temp_entropy.append(graph_entropy[j]*summation[0][j]/graphlet_of_graph[j])
+        graph_rep=np.append(graph_rep,np.array(summation[0]))
+    graph_rep=graphlet_entropy(graph_rep.tolist())
+    for i in range(len(graph_rep)):
+        graph_rep[i]=math.log(graph_rep[i]+1,10)
 
-    return graph_rep
+    sum_entropy=sum(graph_rep)
+    for i in range(len(graph_rep)):
+        graph_rep[i]=graph_rep[i]/sum_entropy
+    return np.array(graph_rep)
 
 
 
