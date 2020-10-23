@@ -79,3 +79,26 @@ def node_entropy(motif_number,graph_entropy,node_occupation):
             node_entropy_vactor[index]+=graph_entropy[int(item)]/motif_number[int(item)]
 
     return node_entropy_vactor
+
+
+def graphlet_entropy(n):
+    l = [2, 3, 3, 3, 4, 4, 4, 4]
+    e = [1, 2, 2, 3, 3, 3, 3, 3]
+    K = 1.0 / 100000
+    T = 100.0
+    DELTA = 256
+
+    beta = symbols('BETA')
+    pi = 3.1415926
+    Integral = sqrt(beta) * sqrt(pi) * DELTA
+    Entropy = []
+    r = 27.0
+    global Nm
+    for i in range(Nm):
+        m_integral = (Integral ** e[i]) * r ** (l[i] - e[i])
+        logZ = n[i] * (-math.log(n[i]) + 1 + log(m_integral) - math.log(factorial(l[i])))
+        U = diff(logZ, beta)
+        E = logZ + U * beta
+        E = E.subs(beta, 1.0 / (K * T))
+        Entropy.append(float(E))
+    return Entropy

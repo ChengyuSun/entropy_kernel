@@ -1,6 +1,7 @@
 import copy
 import numpy as np
 import utils.util as util
+from entropy.Entropy import graphlet_entropy
 
 class GraphletCoder:
     label_number=0
@@ -218,9 +219,10 @@ def graphlet_matrix(adj_original,nodN,temp_node_labels,min_label,max_label):
                 is_zero=False
                 break
         if is_zero:
-            #print('seems like zeros!')
             summation=np.zeros(dim).reshape(1,dim)
-        graph_rep=np.append(graph_rep,summation[0])
+
+        temp_entropy=np.array(graphlet_entropy(summation[0].tolist()))
+        graph_rep=np.append(graph_rep,temp_entropy)
 
     return graph_rep
 
