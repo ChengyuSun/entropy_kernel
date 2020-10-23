@@ -197,20 +197,21 @@ def graph_rep_concat(adj_original,node_labels,label_num):
     return rep_graph
 
 
-def graphlet_matrix(adj_original,nodN,temp_node_labels,min_label,max_label):
-    graph_matrix=[]
+def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
+    graphlet_of_nodes=[]
     graph_rep=np.array([])
     for index in range(nodN):
-        graph_matrix.append(graphlet_diffuse_no_label(index,adj_original))
+        graphlet_of_nodes.append(graphlet_diffuse_no_label(index,adj_original))
 
-    graph_matrix=np.array(graph_matrix)
+    graphlet_of_nodes=np.array(graphlet_of_nodes)
 
-    _,dim=graph_matrix.shape
+    _,dim=graphlet_of_nodes.shape
 
-    #print('graph_matrix.shape: ',graph_matrix.shape)
+    graphlet_of_graph=np.sum(graphlet_of_nodes,axis=0)
+    graph_entropy=np.array(graphlet_entropy(graphlet_of_graph.tolist()))
 
     for temp_label in range(min_label,max_label+1):
-        nodes_reps=graph_matrix[temp_node_labels==temp_label]
+        nodes_reps=graphlet_of_nodes[temp_node_labels==temp_label]
         #print('label '+str(temp_label)+' has nodes '+str(nodes_reps.shape))
         summation=np.sum(nodes_reps,axis=0).reshape(1,dim)
         is_zero=True
@@ -221,8 +222,10 @@ def graphlet_matrix(adj_original,nodN,temp_node_labels,min_label,max_label):
         if is_zero:
             summation=np.zeros(dim).reshape(1,dim)
 
-        temp_entropy=np.array(graphlet_entropy(summation[0].tolist()))
-        graph_rep=np.append(graph_rep,temp_entropy)
+        temp_entropy=[]
+        for j in range(dim):
+            temp_entropy.append(graph_entropy[j]*summation[0][j]/graphlet_of_graph[j])
+        graph_rep=np.append(graph_rep,np.array(temp_entropy))
 
     return graph_rep
 
@@ -234,7 +237,7 @@ ADJACENCY_SUFFIX = '_A.txt'
 GRAPH_ID_SUFFIX = '_graph_indicator.txt'
 
 
-def dataset_graph_reps(dataset):
+def dataset_reps(dataset):
 
     data=util.read_data_txt(dataset)
     graph_ids = set(data['_graph_indicator.txt'])
@@ -265,7 +268,7 @@ def dataset_graph_reps(dataset):
 
         temp_node_labels=data[NODE_LABELS_SUFFIX][node_index_begin:node_index_begin+temp_nodN]
 
-        temp_graph_rep=graphlet_matrix(temp_A,temp_nodN,temp_node_labels,min_label,max_label)
+        temp_graph_rep=gen_graph_rep(temp_A,temp_nodN,temp_node_labels,min_label,max_label)
         dataset_graph_reps.append(temp_graph_rep)
 
         node_index_begin += temp_nodN

@@ -2,14 +2,14 @@ path='../lib/libsvm-3.24/python'
 import sys
 sys.path.append(path)
 from svmutil import *
-from graphlet.count_graphlet import dataset_graph_reps
+from graphlet.count_graphlet import dataset_reps
 from utils.util import read_graph_label
 import numpy as np
 import random
 
 
 dataset='NCI1'
-train_pixel=dataset_graph_reps(dataset)
+train_pixel=dataset_reps(dataset)
 train_label=read_graph_label(dataset)
 
 nodN=len(train_label.tolist())
