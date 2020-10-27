@@ -43,26 +43,6 @@ def rbf_kpca(X, gamma, k):
 def meanX(dataX):
     return np.mean(dataX,axis=0)
 
-# def pca(XMat, k):
-#     average = meanX(XMat)
-#     m, n = np.shape(XMat)
-#     avgs = np.tile(average, (m, 1))
-#     print(average.shape)
-#     print(avgs.shape)
-#     data_adjust = XMat - avgs
-#     print(data_adjust.shape)
-#     covX = np.cov(data_adjust.T)   #计算协方差矩阵
-#     featValue, featVec=  np.linalg.eig(covX)  #求解协方差矩阵的特征值和特征向量
-#     index = np.argsort(-featValue) #依照featValue进行从大到小排序
-#     finalData = []
-#     # 注意特征向量时列向量。而numpy的二维矩阵(数组)a[m][n]中，a[1]表示第1行值
-#     selectVec = np.matrix(featVec.T[index[:k]])  # 所以这里须要进行转置
-#     finalData = data_adjust * selectVec.T
-#     reconData = (finalData * selectVec) + average
-#
-#     return finalData, reconData
-
-
 
 def pca(origin_matrix,target_dim):
     pca = PCA(n_components=target_dim)
@@ -70,3 +50,13 @@ def pca(origin_matrix,target_dim):
     newX = pca.fit_transform(origin_matrix)  # 降维后的数据
     # PCA(copy=True, n_components=2, whiten=False)
     return newX
+
+
+def js_kernel(v1,v2):
+    dim=len(v1.tolist())
+    kl_divergence=0
+    js_divergence=0
+    for i in range(dim):
+    #todo
+
+    return
