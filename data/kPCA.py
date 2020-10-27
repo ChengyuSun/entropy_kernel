@@ -59,4 +59,4 @@ def js_kernel(v1,v2):
     for i in range(dim):
     #todo
 
-    return
+        return
