@@ -227,13 +227,13 @@ def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
         # for j in range(dim):
         #     temp_entropy.append(graph_entropy[j]*summation[0][j]/graphlet_of_graph[j])
         graph_rep=np.append(graph_rep,np.array(summation[0]))
-    graph_rep=graphlet_entropy(graph_rep.tolist())
-    for i in range(len(graph_rep)):
-        graph_rep[i]=math.log(graph_rep[i]+1,10)
+    #graph_rep=graphlet_entropy(graph_rep.tolist())
+    # for i in range(len(graph_rep)):
+    #     graph_rep[i]=math.log(graph_rep[i]+1,10)
 
-    sum_entropy=sum(graph_rep)
-    for i in range(len(graph_rep)):
-        graph_rep[i]=graph_rep[i]/sum_entropy
+    # sum_entropy=sum(graph_rep)
+    # for i in range(len(graph_rep)):
+    #     graph_rep[i]=graph_rep[i]/sum_entropy
     return np.array(graph_rep)
 
 
