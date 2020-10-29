@@ -1,4 +1,4 @@
-Nn=20000
+Nn=1000
 def devide(N):
     n = [[0] * N for i in range(0, N)]
     for i in range(N):
@@ -16,7 +16,7 @@ def devide(N):
         n[i][i]=1
     return n
 dN_matrix=devide(Nn)
-with open("./data2/devide_"+str(Nn)+"_Nodes.csv","w") as fc:
+with open("./file/devide_"+str(Nn)+"_Nodes.csv","w") as fc:
     for i in range(Nn):
         fc.write(str(sum(dN_matrix[i]))+'\n')
 

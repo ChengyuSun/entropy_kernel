@@ -66,7 +66,7 @@ def calEntropy(n,N,dN):
 
 
 def graphEntropy(motifNumber,nodN):
-    dN = read_data(nodN - 1, '../entropy/file/devide_347_Nodes.csv')
+    dN = read_data(nodN - 1, '../entropy/file/devide_1000_Nodes.csv')
     return calEntropy(motifNumber,nodN,dN)
 
 def node_entropy(motif_number,graph_entropy,node_occupation):

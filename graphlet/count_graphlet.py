@@ -257,9 +257,6 @@ def dataset_reps(dataset):
     edge_index = 0
     node_index_begin = 0
 
-
-    f = open("../data/processed/{}_graphlet_count.txt".format(dataset), "w")
-
     dataset_graph_reps=[]
 
     for g_id in set(graph_ids):
