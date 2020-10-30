@@ -51,7 +51,7 @@ def pca(origin_matrix, target_dim):
     return newX
 
 
-def js_kernel(v1, v2):
+def js_kernel(v1, v2,level=1):
     dim = len(v1.tolist())
     kl_divergence_1 = 0
     kl_divergence_2 = 0
@@ -62,3 +62,14 @@ def js_kernel(v1, v2):
     js_divergence = kl_divergence_1 + kl_divergence_2
 
     return js_divergence / 2
+
+
+def js_kernel_pca(input,level=1):
+    m,n=input.size
+    matrix=np.zeros((m,m),float)
+    for i in range(m):
+        for j in range(m):
+            matrix[i][j]=js_kernel(input[i],input[j])
+
+
+    return

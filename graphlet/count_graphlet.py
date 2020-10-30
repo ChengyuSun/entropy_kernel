@@ -165,37 +165,37 @@ def graphlet_diffuse_no_label(start_index,adj_original):
 
 
 
-def graph_rep_sum(adj_original,node_labels,label_num):
-    coder=GraphletCoder(label_num)
-    N=len(adj_original)
-    rep_graph=np.zeros(0)
-    for start_index in range(N):
-        rep_node=graphlet_diffuse(start_index,adj_original,node_labels,coder)
-        if start_index==0:
-            rep_graph=rep_node
-        else:
-            rep_graph+=rep_node
-    return  rep_graph
-
-def graph_rep_concat(adj_original,node_labels,label_num):
-    #按照degree升序排列并反转为降序排列
-    degree_rank = np.argsort(sum(np.transpose(adj_original)))
-    coder = GraphletCoder(label_num)
-    degree_list=list(degree_rank)
-    degree_list.reverse()
-    degree_rank=np.array(degree_list)
-
-    rep_node_0=graphlet_diffuse(degree_rank[0], adj_original, node_labels, coder)
-    rep_graph = np.array([rep_node_0])
-    rep_node_len=len(rep_node_0)
-
-    for index in range(1,10):#将degree最大的十个节点表示concat 作为图表示
-        if index<len(degree_rank):
-            rep_node = graphlet_diffuse(degree_rank[index], adj_original, node_labels, coder)
-            rep_graph=np.append(rep_graph,rep_node)
-        else:
-            rep_graph = np.append(rep_graph, np.zeros(rep_node_len,int))
-    return rep_graph
+# def graph_rep_sum(adj_original,node_labels,label_num):
+#     coder=GraphletCoder(label_num)
+#     N=len(adj_original)
+#     rep_graph=np.zeros(0)
+#     for start_index in range(N):
+#         rep_node=graphlet_diffuse(start_index,adj_original,node_labels,coder)
+#         if start_index==0:
+#             rep_graph=rep_node
+#         else:
+#             rep_graph+=rep_node
+#     return  rep_graph
+#
+# def graph_rep_concat(adj_original,node_labels,label_num):
+#     #按照degree升序排列并反转为降序排列
+#     degree_rank = np.argsort(sum(np.transpose(adj_original)))
+#     coder = GraphletCoder(label_num)
+#     degree_list=list(degree_rank)
+#     degree_list.reverse()
+#     degree_rank=np.array(degree_list)
+#
+#     rep_node_0=graphlet_diffuse(degree_rank[0], adj_original, node_labels, coder)
+#     rep_graph = np.array([rep_node_0])
+#     rep_node_len=len(rep_node_0)
+#
+#     for index in range(1,10):#将degree最大的十个节点表示concat 作为图表示
+#         if index<len(degree_rank):
+#             rep_node = graphlet_diffuse(degree_rank[index], adj_original, node_labels, coder)
+#             rep_graph=np.append(rep_graph,rep_node)
+#         else:
+#             rep_graph = np.append(rep_graph, np.zeros(rep_node_len,int))
+#     return rep_graph
 
 
 def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
@@ -211,6 +211,7 @@ def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
     graphlet_of_graph=np.sum(graphlet_of_nodes,axis=0)
     graph_entropy=np.array(graphlet_entropy(graphlet_of_graph.tolist()))
 
+    #graph_rep_2=np.array([])
     for temp_label in range(min_label,max_label+1):
         nodes_reps=graphlet_of_nodes[temp_node_labels==temp_label]
         #print('label '+str(temp_label)+' has nodes '+str(nodes_reps.shape))
@@ -225,12 +226,25 @@ def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
 
         # temp_entropy=[]
         # for j in range(dim):
-        #     temp_entropy.append(graph_entropy[j]*summation[0][j]/graphlet_of_graph[j])
-        graph_rep=np.append(graph_rep,np.array(summation[0]))
-    #graph_rep=graphlet_entropy(graph_rep.tolist())
-    # for i in range(len(graph_rep)):
-    #     graph_rep[i]=math.log(graph_rep[i]+1,10)
+        #     if graphlet_of_graph[j]==0:
+        #         temp_entropy.append(0)
+        #     else:
+        #         temp_entropy.append(graph_entropy[j]*summation[0][j]/graphlet_of_graph[j])
 
+        temp_entropy = graphlet_entropy(summation[0])
+        #graph_rep=np.append(graph_rep,np.array(summation[0]))
+
+        graph_rep = np.append(graph_rep, np.array(temp_entropy))
+        #graph_rep_2 = np.append(graph_rep_2, np.array(summation[0]))
+
+    # print(graph_rep)
+    # print(graph_rep_2)
+    # log
+    graph_rep=graphlet_entropy(graph_rep.tolist())
+    for i in range(len(graph_rep)):
+        graph_rep[i]=math.log(graph_rep[i]+1,10)
+
+    # distribution
     # sum_entropy=sum(graph_rep)
     # for i in range(len(graph_rep)):
     #     graph_rep[i]=graph_rep[i]/sum_entropy
