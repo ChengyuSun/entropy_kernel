@@ -121,3 +121,18 @@ def load_data_ppi(prefix='../data/ppi/ppi', normalize=True, load_walks=False):
                 walks.append(map(conversion, line.split()))
 
     return G, feats, id_map, walks, class_map
+
+def acc_calculator(accs):
+    n = len(accs)
+    print('acc number: ',n)
+    avg = sum(accs) / n
+    print('avg', avg)
+    print('max(accs)', max(accs))
+    print('min(accs)', min(accs))
+    max_dis = max(accs) - avg
+    min_dis = min(accs) - avg
+    if max_dis > min_dis:
+        print('distance:',max_dis)
+    else:
+        print('distance:',min_dis)
+    return

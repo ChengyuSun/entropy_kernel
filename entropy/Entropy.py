@@ -82,14 +82,14 @@ def graphlet_entropy(n):
     l = [2, 3, 3, 3, 4, 4, 4, 4]
     e = [1, 2, 2, 3, 3, 3, 3, 3]
     K = 1.0 / 100000
-    T = 100.0
+    T = 5000
     DELTA = 256
 
     beta = symbols('BETA')
     pi = 3.1415926
     Integral = sqrt(beta) * sqrt(pi) * DELTA
     Entropy = []
-    r = 27.0
+    r = 100
     Nm=len(n)
     for i in range(Nm):
         if n[i]==0:
