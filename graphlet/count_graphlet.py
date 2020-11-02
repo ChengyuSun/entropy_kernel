@@ -224,14 +224,14 @@ def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
         if is_zero:
             summation=np.zeros(dim).reshape(1,dim)
 
-        # temp_entropy=[]
-        # for j in range(dim):
-        #     if graphlet_of_graph[j]==0:
-        #         temp_entropy.append(0)
-        #     else:
-        #         temp_entropy.append(graph_entropy[j]*summation[0][j]/graphlet_of_graph[j])
+        temp_entropy=[]
+        for j in range(dim):
+            if graphlet_of_graph[j]==0:
+                temp_entropy.append(0)
+            else:
+                temp_entropy.append(graph_entropy[j]*summation[0][j]/graphlet_of_graph[j])
 
-        temp_entropy = graphlet_entropy(summation[0])
+        #temp_entropy = graphlet_entropy(summation[0])
         #graph_rep=np.append(graph_rep,np.array(summation[0]))
 
         graph_rep = np.append(graph_rep, np.array(temp_entropy))
@@ -240,9 +240,9 @@ def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
     # print(graph_rep)
     # print(graph_rep_2)
     # log
-    graph_rep=graphlet_entropy(graph_rep.tolist())
-    for i in range(len(graph_rep)):
-        graph_rep[i]=math.log(graph_rep[i]+1,10)
+    # graph_rep=graphlet_entropy(graph_rep.tolist())
+    # for i in range(len(graph_rep)):
+    #     graph_rep[i]=math.log(graph_rep[i]+1,10)
 
     # distribution
     # sum_entropy=sum(graph_rep)
