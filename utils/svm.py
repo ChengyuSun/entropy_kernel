@@ -30,7 +30,7 @@ def n_cross(n,index,nodN,random_idx):
 
 
 def kernel_svm(kernel_values,train_idx,test_idx):
-    print(train_idx.shape)
+    print(len(kernel_values[train_idx].tolist()[0]))
     prob = svm_problem(labels[train_idx].tolist(), kernel_values[train_idx].tolist(), isKernel=True)
     param = svm_parameter('-t 4 -c 4 -b 1')
     model = svm_train(prob, param)
