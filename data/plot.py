@@ -11,8 +11,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D  # 空间三维画图
-from utils.util import store_matrix,read_data,read_graph_label
-from data.kPCA import rbf_kpca,pca
+from utils.util import read_graph_label
+from utils.kPCA import rbf_kpca
 from graphlet.count_graphlet import dataset_reps
 
 dataset='NCI1'

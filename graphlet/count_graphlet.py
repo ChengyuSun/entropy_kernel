@@ -214,16 +214,9 @@ def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
     #graph_rep_2=np.array([])
     for temp_label in range(min_label,max_label+1):
         nodes_reps=graphlet_of_nodes[temp_node_labels==temp_label]
-        #print('label '+str(temp_label)+' has nodes '+str(nodes_reps.shape))
         summation=np.sum(nodes_reps,axis=0).reshape(1,dim)
-        is_zero=True
-        for i in range(dim):
-            if summation[0][i] !=0:
-                is_zero=False
-                break
-        if is_zero:
-            summation=np.zeros(dim).reshape(1,dim)
 
+        #allocate(complex) graphlet entropy
         # temp_entropy=[]
         # for j in range(dim):
         #     if graphlet_of_graph[j]==0:
@@ -231,10 +224,13 @@ def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
         #     else:
         #         temp_entropy.append(graph_entropy[j]*summation[0][j]/graphlet_of_graph[j])
 
-        temp_entropy = graphlet_entropy(summation[0])
 
-        graph_rep = np.append(graph_rep, np.array(temp_entropy))
-        #graph_rep=np.append(graph_rep,np.array(summation[0]))
+        #simple graphlet entropy
+        #temp_entropy = graphlet_entropy(summation[0])
+        #graph_rep = np.append(graph_rep, np.array(temp_entropy))
+
+        #only graphlet count
+        graph_rep=np.append(graph_rep,np.array(summation[0]))
 
         #graph_rep_2 = np.append(graph_rep_2, np.array(summation[0]))
 
@@ -243,9 +239,9 @@ def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
 
 
     # log
-    graph_rep=graphlet_entropy(graph_rep.tolist())
-    for i in range(len(graph_rep)):
-        graph_rep[i]=math.log(graph_rep[i]+1,10)
+    # graph_rep=graphlet_entropy(graph_rep.tolist())
+    # for i in range(len(graph_rep)):
+    #     graph_rep[i]=math.log(graph_rep[i]+1,10)
 
     # distribution
     # sum_entropy=sum(graph_rep)

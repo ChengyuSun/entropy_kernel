@@ -1,6 +1,5 @@
 # encoding:utf-8
 import numpy as np
-import csv
 from scipy.spatial.distance import pdist, squareform
 from sklearn.decomposition import PCA
 import math
@@ -51,25 +50,43 @@ def pca(origin_matrix, target_dim):
     return newX
 
 
-def js_kernel(v1, v2,level=1):
-    dim = len(v1.tolist())
+def js_kernel(v1, v2):
     kl_divergence_1 = 0
     kl_divergence_2 = 0
-    js_divergence = 0
-    for i in range(dim):
+    for i in range(len(v1)):
         kl_divergence_1 += v1[i] * math.log(v1[i] / v2[i], 2)
         kl_divergence_2 += v2[i] * math.log(v2[i] / v1[i], 2)
     js_divergence = kl_divergence_1 + kl_divergence_2
-
     return js_divergence / 2
 
 
-def js_kernel_pca(input,level=1):
-    m,n=input.size
-    matrix=np.zeros((m,m),float)
-    for i in range(m):
-        for j in range(m):
-            matrix[i][j]=js_kernel(input[i],input[j])
+def js_kernel_level(v1, v2, level):
+    for k in range(len(v1)):
+        v1[k] = math.log(v1[k] + 2, 2)
+        v2[k] = math.log(v2[k] + 2, 2)
+    v1_new = []
+    v2_new = []
+    label_num = len(v1) // 8
+    for i in range(label_num):
+        v1_new += v1[i * 8:i * 8 + level]
+        v2_new += v2[i * 8:i * 8 + level]
+    sum1 = sum(v1_new)
+    sum2 = sum(v2_new)
+    for k in range(len(v1_new)):
+        v1_new[k] = v1_new[k] / sum1
+        v2_new[k] = v2_new[k] / sum2
+    return js_kernel(v1_new, v2_new)
 
 
-    return
+def js_kernel_process(input, level=8):
+    sample_num = len(input)
+    matrix = np.zeros((sample_num, sample_num), float)
+    for i in range(sample_num):
+        for j in range(sample_num):
+            matrix[i][j] = js_kernel_level(input[i].tolist(), input[j].tolist(), level)
+    id_vactor = np.arange(sample_num).reshape(sample_num, 1)
+    # print('id_vactor: ',id_vactor.shape)
+    # print('matrix: ', matrix.shape)
+    matrix = np.append(id_vactor, matrix,axis=1)
+
+    return matrix

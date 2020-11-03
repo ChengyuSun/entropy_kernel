@@ -3,18 +3,21 @@ import os
 import json
 from networkx.readwrite import json_graph
 
+
 def complete_path(folder, fname):
     return os.path.join(folder, fname)
 
+
 def read_graph_label(dataset):
-    filename='../data/{}/{}_graph_labels.txt'.format(dataset,dataset)
+    filename = '../data/{}/{}_graph_labels.txt'.format(dataset, dataset)
     print('reading data labels...')
     graph_labels = np.loadtxt(filename, dtype=np.float, delimiter=',')
     return graph_labels
 
 
 def read_adjMatrix(file_index):
-    array = open('D:/PycharmProjects/motif/undirected-motif-entropy/data/graph'+str(file_index+1)+'.csv').readlines()
+    array = open(
+        'D:/PycharmProjects/motif/undirected-motif-entropy/data/graph' + str(file_index + 1) + '.csv').readlines()
     N = len(array)
     matrix = []
     for line in array:
@@ -22,10 +25,10 @@ def read_adjMatrix(file_index):
         line = [int(float(x)) for x in line]
         matrix.append(line)
     matrix = np.array(matrix)
-    return matrix,N
+    return matrix, N
 
 
-def store_matrix(matrix,filename):
+def store_matrix(matrix, filename):
     f1 = open(filename, "w")
     for line in matrix:
         for item in line:
@@ -122,17 +125,18 @@ def load_data_ppi(prefix='../data/ppi/ppi', normalize=True, load_walks=False):
 
     return G, feats, id_map, walks, class_map
 
+
 def acc_calculator(accs):
     n = len(accs)
-    print('acc number: ',n)
+    print('acc number: ', n)
     avg = sum(accs) / n
-    print('avg', avg)
-    print('max(accs)', max(accs))
-    print('min(accs)', min(accs))
+    print('avg: ', avg)
+    print('max: ', max(accs))
+    print('min: ', min(accs))
     max_dis = max(accs) - avg
-    min_dis = min(accs) - avg
+    min_dis = avg - min(accs)
     if max_dis > min_dis:
-        print('distance:',max_dis)
+        print('distance:', max_dis)
     else:
-        print('distance:',min_dis)
+        print('distance:', min_dis)
     return
