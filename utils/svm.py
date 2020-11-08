@@ -7,7 +7,7 @@ from utils.util import read_graph_label,acc_calculator
 import numpy as np
 import random
 from sklearn import svm
-from utils.kPCA import js_kernel_process
+from utils.kPCA import js_kernel_process,linear_kernel_process
 
 
 dataset='MUTAG'
@@ -15,8 +15,7 @@ features=dataset_reps(dataset)
 labels=read_graph_label(dataset)
 
 nodN=len(labels.tolist())
-random_idx = [i for i in range(nodN)]
-random.shuffle(random_idx)
+
 
 def n_cross(n,index,nodN,random_idx):
 
@@ -30,7 +29,6 @@ def n_cross(n,index,nodN,random_idx):
 
 
 def kernel_svm(kernel_values,train_idx,test_idx):
-    print(len(kernel_values[train_idx].tolist()[0]))
     prob = svm_problem(labels[train_idx].tolist(), kernel_values[train_idx].tolist(), isKernel=True)
     param = svm_parameter('-t 4 -c 4 -b 1')
     model = svm_train(prob, param)
@@ -52,10 +50,42 @@ def sklearn_svm(train_idx,test_idx):
 
 accs=[]
 n=10
-kernel_features=js_kernel_process(features,8)
-for i in range(n):
-    train_idx_temp, test_idx_temp = n_cross(n,i, nodN, random_idx)
-    #accs.append(sklearn_svm(train_idx_temp,test_idx_temp))
-    accs.append(kernel_svm(kernel_features,train_idx_temp,test_idx_temp))
-print(dataset)
+
+# max_level=0
+# max_acc=0
+# for level in range(1,9):
+#     kernel_features = js_kernel_process(features, level)
+#     for i in range(n):
+#         train_idx_temp, test_idx_temp = n_cross(n,i, nodN, random_idx)
+#         #accs.append(sklearn_svm(train_idx_temp,test_idx_temp))
+#         accs.append(kernel_svm(kernel_features,train_idx_temp,test_idx_temp))
+#     avg=acc_calculator(accs)
+#     if avg>max_acc:
+#         max_level=level
+#         max_acc=avg
+# print('dataset: {}   acc: {}  best_level: {}'.format(dataset,max_acc,max_level))
+
+
+
+#kernel_features=linear_kernel_process(features)
+
+for k in range(10):
+    temp_accs = []
+    random_idx = [i for i in range(nodN)]
+    random.shuffle(random_idx)
+    for i in range(n):
+        train_idx_temp, test_idx_temp = n_cross(n, i, nodN, random_idx)
+        temp_accs.append(sklearn_svm(train_idx_temp,test_idx_temp))
+        #accs.append(kernel_svm(kernel_features, train_idx_temp, test_idx_temp))
+
+    temp_res=acc_calculator(temp_accs)
+    print('\n------temp_res: {} -------\n'.format(format(temp_res,'.2f')))
+    accs.append(temp_res)
+
+print('\n\n\n--------------------------\n'
+      '--------------------------\n'
+      '----------result------------\n'
+      '---------------------------\n'
+      '---------------------------\n')
+print('dataset: ',dataset)
 acc_calculator(accs)

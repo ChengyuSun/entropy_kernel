@@ -139,4 +139,4 @@ def acc_calculator(accs):
         print('distance:', max_dis)
     else:
         print('distance:', min_dis)
-    return
+    return avg
