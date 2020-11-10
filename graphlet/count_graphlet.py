@@ -163,41 +163,6 @@ def graphlet_diffuse_no_label(start_index,adj_original):
                         node_rep[7] += 1
     return np.array(node_rep)
 
-
-
-# def graph_rep_sum(adj_original,node_labels,label_num):
-#     coder=GraphletCoder(label_num)
-#     N=len(adj_original)
-#     rep_graph=np.zeros(0)
-#     for start_index in range(N):
-#         rep_node=graphlet_diffuse(start_index,adj_original,node_labels,coder)
-#         if start_index==0:
-#             rep_graph=rep_node
-#         else:
-#             rep_graph+=rep_node
-#     return  rep_graph
-#
-# def graph_rep_concat(adj_original,node_labels,label_num):
-#     #按照degree升序排列并反转为降序排列
-#     degree_rank = np.argsort(sum(np.transpose(adj_original)))
-#     coder = GraphletCoder(label_num)
-#     degree_list=list(degree_rank)
-#     degree_list.reverse()
-#     degree_rank=np.array(degree_list)
-#
-#     rep_node_0=graphlet_diffuse(degree_rank[0], adj_original, node_labels, coder)
-#     rep_graph = np.array([rep_node_0])
-#     rep_node_len=len(rep_node_0)
-#
-#     for index in range(1,10):#将degree最大的十个节点表示concat 作为图表示
-#         if index<len(degree_rank):
-#             rep_node = graphlet_diffuse(degree_rank[index], adj_original, node_labels, coder)
-#             rep_graph=np.append(rep_graph,rep_node)
-#         else:
-#             rep_graph = np.append(rep_graph, np.zeros(rep_node_len,int))
-#     return rep_graph
-
-
 def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
     graphlet_of_nodes=[]
     graph_rep=np.array([])
@@ -226,11 +191,11 @@ def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
 
 
         #simple graphlet entropy
-        #temp_entropy = graphlet_entropy(summation[0])
-        #graph_rep = np.append(graph_rep, np.array(temp_entropy))
+        temp_entropy = graphlet_entropy(summation[0])
+        graph_rep = np.append(graph_rep, np.array(temp_entropy))
 
         #only graphlet count
-        graph_rep=np.append(graph_rep,np.array(summation[0]))
+        #graph_rep=np.append(graph_rep,np.array(summation[0]))
 
         #graph_rep_2 = np.append(graph_rep_2, np.array(summation[0]))
 
@@ -239,9 +204,9 @@ def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
 
 
     # log
-    # graph_rep=graphlet_entropy(graph_rep.tolist())
-    # for i in range(len(graph_rep)):
-    #     graph_rep[i]=math.log(graph_rep[i]+1,10)
+    graph_rep=graphlet_entropy(graph_rep.tolist())
+    for i in range(len(graph_rep)):
+        graph_rep[i]=math.log(graph_rep[i]+1,10)
 
     # distribution
     # sum_entropy=sum(graph_rep)

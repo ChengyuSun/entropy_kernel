@@ -91,22 +91,10 @@ def js_kernel_process(input, level=8):
 
     return matrix
 
-
-def liner_kernel(v1,v2):
-    sum=0
-    for i in range(len(v1)):
-        sum+=v1[i]*v2[i]
-    return sum
-
-def linear_kernel_process(input):
-    sample_num = len(input)
-    matrix = np.zeros((sample_num, sample_num), float)
-    for i in range(sample_num):
-        for j in range(sample_num):
-            matrix[i][j] = liner_kernel(input[i].tolist(), input[j].tolist())
-    id_vactor = np.arange(1,sample_num+1).reshape(sample_num, 1)
-    # print('id_vactor: ',id_vactor.shape)
-    # print('matrix: ', matrix.shape)
-    matrix = np.append(id_vactor, matrix,axis=1)
-
-    return matrix
+def select_level(input, level=8):
+    label_num = len(input[0]) // 8
+    output=input[:,:level]
+    for i in range(1,label_num):
+        output=np.append(output,input[:,i*8:i*8+level],axis=1)
+    print('select_dim: '+str(output.shape))
+    return output
