@@ -10,7 +10,7 @@ from sklearn import svm
 from utils.kPCA import js_kernel_process,select_level
 
 
-dataset='PTC_FR'
+dataset='NCI1'
 original_features=dataset_reps(dataset)
 original_labels=read_graph_label(dataset)
 
@@ -70,6 +70,7 @@ print('dataset: {}   acc: {}  best_level: {}'.format(dataset,max_acc,max_level))
 
 
 #kernel_features=linear_kernel_process(features)
+#features=select_level(original_features,1)
 
 def ten_ten_svm():
     accs = []
@@ -79,7 +80,7 @@ def ten_ten_svm():
         random.shuffle(random_idx)
         for i in range(10):
             train_idx_temp, test_idx_temp = n_cross(10, i, nodN, random_idx)
-            temp_accs.append(sklearn_svm(features,labels,train_idx_temp,test_idx_temp))
+            temp_accs.append(sklearn_svm(features,original_labels,train_idx_temp,test_idx_temp))
             #accs.append(kernel_svm(kernel_features, train_idx_temp, test_idx_temp))
         temp_res=acc_calculator(temp_accs)
         print('\n------temp_res: {} -------\n'.format(format(temp_res,'.2f')))
@@ -92,3 +93,5 @@ def ten_ten_svm():
           '---------------------------\n')
     print('dataset: ',dataset)
     acc_calculator(accs)
+
+#ten_ten_svm()
