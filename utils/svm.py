@@ -10,7 +10,7 @@ from sklearn import svm
 from utils.kPCA import js_kernel_process,select_level
 
 
-dataset='NCI1'
+dataset='PPI'
 original_features=dataset_reps(dataset)
 original_labels=read_graph_label(dataset)
 
@@ -42,6 +42,8 @@ def normal_svm(features,labels,train_idx,test_idx):
 
 def sklearn_svm(features,labels,train_idx,test_idx):
     clf_linear = svm.SVC(kernel='linear')
+    print('train_idx: ',train_idx)
+    print('features[train]: ',features[train_idx])
     clf_linear.fit(features[train_idx], labels[train_idx])
     score_linear = clf_linear.score(features[test_idx], labels[test_idx])
     #print("The score of linear is : %f" % score_linear)
@@ -49,24 +51,23 @@ def sklearn_svm(features,labels,train_idx,test_idx):
 
 
 
-max_level=0
-max_acc=0
-random_idx = [i for i in range(nodN)]
-random.shuffle(random_idx)
-for level in range(1,9):
-    select_level_features=select_level(original_features,level)
-    #kernel_features = js_kernel_process(features, level)
-    accs=[]
-    for i in range(10):
-        train_idx_temp, test_idx_temp = n_cross(10,i, nodN, random_idx)
-        accs.append(sklearn_svm(select_level_features,original_labels,train_idx_temp,test_idx_temp))
-        #accs.append(kernel_svm(kernel_features,train_idx_temp,test_idx_temp))
-    avg=acc_calculator(accs)
-    if avg>max_acc:
-        max_level=level
-        max_acc=avg
-print('dataset: {}   acc: {}  best_level: {}'.format(dataset,max_acc,max_level))
-
+# max_level=0
+# max_acc=0
+# random_idx = [i for i in range(nodN)]
+# random.shuffle(random_idx)
+# for level in range(1,9):
+#     select_level_features=select_level(original_features,level)
+#     #kernel_features = js_kernel_process(features, level)
+#     accs=[]
+#     for i in range(10):
+#         train_idx_temp, test_idx_temp = n_cross(10,i, nodN, random_idx)
+#         accs.append(sklearn_svm(select_level_features,original_labels,train_idx_temp,test_idx_temp))
+#         #accs.append(kernel_svm(kernel_features,train_idx_temp,test_idx_temp))
+#     avg=acc_calculator(accs)
+#     if avg>max_acc:
+#         max_level=level
+#         max_acc=avg
+# print('dataset: {}   acc: {}  best_level: {}'.format(dataset,max_acc,max_level))
 
 
 #kernel_features=linear_kernel_process(features)
@@ -80,7 +81,7 @@ def ten_ten_svm():
         random.shuffle(random_idx)
         for i in range(10):
             train_idx_temp, test_idx_temp = n_cross(10, i, nodN, random_idx)
-            temp_accs.append(sklearn_svm(features,original_labels,train_idx_temp,test_idx_temp))
+            temp_accs.append(sklearn_svm(original_features,original_labels,train_idx_temp,test_idx_temp))
             #accs.append(kernel_svm(kernel_features, train_idx_temp, test_idx_temp))
         temp_res=acc_calculator(temp_accs)
         print('\n------temp_res: {} -------\n'.format(format(temp_res,'.2f')))
@@ -94,4 +95,4 @@ def ten_ten_svm():
     print('dataset: ',dataset)
     acc_calculator(accs)
 
-#ten_ten_svm()
+ten_ten_svm()

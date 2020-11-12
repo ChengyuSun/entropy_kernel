@@ -9,6 +9,8 @@ def complete_path(folder, fname):
 
 
 def read_graph_label(dataset):
+    if dataset=='PPI':
+        return read_ppi_graph_label()
     filename = '../data/{}/{}_graph_labels.txt'.format(dataset, dataset)
     print('reading data labels...')
     graph_labels = np.loadtxt(filename, dtype=np.float, delimiter=',')
@@ -140,3 +142,31 @@ def acc_calculator(accs):
     else:
         print('distance:', min_dis)
     return avg
+
+
+from scipy.io import loadmat
+
+def read_ppi():
+    res_graph=[]
+    res_node_label=[]
+    np.set_printoptions(suppress=True)
+    m = loadmat("../data/PPIS/PPIs.mat")
+    data = m.get('PPIs')
+    for i in range(86):
+        res_graph.append(np.array(data[0][i][0].todense()).astype(int))
+        temp=[]
+        for j in data[0][i][1][0][0][0]:
+            temp.append(j[0])
+        res_node_label.append(temp)
+    return res_graph,np.array(res_node_label)
+
+
+
+import csv
+def read_ppi_graph_label():
+    res=[]
+    with open('../data/PPIS/PPI_label.csv')as f:
+        f_csv = csv.reader(f)
+        for row in f_csv:
+            res.append(1) if int(row[0])=='1' else res.append(0)
+    return np.array(res)

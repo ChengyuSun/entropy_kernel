@@ -170,16 +170,20 @@ def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
         graphlet_of_nodes.append(graphlet_diffuse_no_label(index,adj_original))
 
     graphlet_of_nodes=np.array(graphlet_of_nodes)
-
     _,dim=graphlet_of_nodes.shape
 
-    graphlet_of_graph=np.sum(graphlet_of_nodes,axis=0)
-    graph_entropy=np.array(graphlet_entropy(graphlet_of_graph.tolist()))
+    # graphlet_of_graph=np.sum(graphlet_of_nodes,axis=0)
+    # graph_entropy=np.array(graphlet_entropy(graphlet_of_graph.tolist()))
 
     #graph_rep_2=np.array([])
     for temp_label in range(min_label,max_label+1):
         nodes_reps=graphlet_of_nodes[temp_node_labels==temp_label]
-        summation=np.sum(nodes_reps,axis=0).reshape(1,dim)
+        #todo
+        print(nodes_reps)
+        if len(nodes_reps)==0:
+            summation=np.zeros((1,dim))
+        else:
+            summation=np.sum(nodes_reps,axis=0).reshape(1,dim)
 
         #allocate(complex) graphlet entropy
         # temp_entropy=[]
@@ -191,11 +195,11 @@ def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
 
 
         #simple graphlet entropy
-        temp_entropy = graphlet_entropy(summation[0])
-        graph_rep = np.append(graph_rep, np.array(temp_entropy))
+        # temp_entropy = graphlet_entropy(summation[0])
+        # graph_rep = np.append(graph_rep, np.array(temp_entropy))
 
         #only graphlet count
-        #graph_rep=np.append(graph_rep,np.array(summation[0]))
+        graph_rep=np.append(graph_rep,np.array(summation[0]))
 
         #graph_rep_2 = np.append(graph_rep_2, np.array(summation[0]))
 
@@ -223,37 +227,54 @@ GRAPH_ID_SUFFIX = '_graph_indicator.txt'
 
 
 def dataset_reps(dataset):
+    dataset_graph_reps = []
 
-    data=util.read_data_txt(dataset)
-    graph_ids = set(data['_graph_indicator.txt'])
-    min_label=min(data[NODE_LABELS_SUFFIX])
-    max_label = max(data[NODE_LABELS_SUFFIX])
-    node_label_num =  max_label-min_label + 1
-    print('node labels number: ', node_label_num)
+    if dataset == 'PPI':
+        graphs,node_labels = util.read_ppi()
+        node_label_all=[]
+        for i in node_labels:
+            for j in i:
+                node_label_all.append(j)
+        min_label=min(node_label_all)
+        max_label=max(node_label_all)
+        for i in range(86):
+            temp_A = graphs[i]
+            temp_node_labels = node_labels[i]
+            temp_nodN = len(temp_node_labels)
+            temp_graph_rep = gen_graph_rep(temp_A, temp_nodN, temp_node_labels, min_label, max_label)
+            dataset_graph_reps.append(temp_graph_rep)
+    else:
+        data=util.read_data_txt(dataset)
+        graph_ids = set(data['_graph_indicator.txt'])
+        min_label=min(data[NODE_LABELS_SUFFIX])
+        max_label = max(data[NODE_LABELS_SUFFIX])
+        node_label_num =  max_label-min_label + 1
+        print('node labels number: ', node_label_num)
 
-    adj = data[ADJACENCY_SUFFIX]
-    edge_index = 0
-    node_index_begin = 0
+        adj = data[ADJACENCY_SUFFIX]
+        edge_index = 0
+        node_index_begin = 0
 
-    dataset_graph_reps=[]
 
-    for g_id in set(graph_ids):
-        #print('正在处理图：' + str(g_id))
-        node_ids = np.argwhere(data['_graph_indicator.txt'] == g_id).squeeze()
-        node_ids.sort()
 
-        temp_nodN = len(node_ids)
-        temp_A = np.zeros([temp_nodN, temp_nodN], int)
-        while (edge_index < len(adj)) and (adj[edge_index][0] - 1 in node_ids):
-            temp_A[adj[edge_index][0] - 1 - node_index_begin][adj[edge_index][1] - 1 - node_index_begin] = 1
-            edge_index += 1
+        for g_id in set(graph_ids):
+            # print('正在处理图：' + str(g_id))
+            node_ids = np.argwhere(data['_graph_indicator.txt'] == g_id).squeeze()
+            node_ids.sort()
 
-        temp_node_labels=data[NODE_LABELS_SUFFIX][node_index_begin:node_index_begin+temp_nodN]
+            temp_nodN = len(node_ids)
+            temp_A = np.zeros([temp_nodN, temp_nodN], int)
+            while (edge_index < len(adj)) and (adj[edge_index][0] - 1 in node_ids):
+                temp_A[adj[edge_index][0] - 1 - node_index_begin][adj[edge_index][1] - 1 - node_index_begin] = 1
+                edge_index += 1
 
-        temp_graph_rep=gen_graph_rep(temp_A,temp_nodN,temp_node_labels,min_label,max_label)
-        dataset_graph_reps.append(temp_graph_rep)
+            temp_node_labels = data[NODE_LABELS_SUFFIX][node_index_begin:node_index_begin + temp_nodN]
 
-        node_index_begin += temp_nodN
+            temp_graph_rep = gen_graph_rep(temp_A, temp_nodN, temp_node_labels, min_label, max_label)
+            dataset_graph_reps.append(temp_graph_rep)
+
+            node_index_begin += temp_nodN
+
 
     return np.array(dataset_graph_reps)
 
