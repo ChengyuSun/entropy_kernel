@@ -9,10 +9,10 @@ def complete_path(folder, fname):
 
 
 def read_graph_label(dataset):
+    print('reading data labels...')
     if dataset=='PPI':
         return read_ppi_graph_label()
     filename = '../data/{}/{}_graph_labels.txt'.format(dataset, dataset)
-    print('reading data labels...')
     graph_labels = np.loadtxt(filename, dtype=np.float, delimiter=',')
     return graph_labels
 
@@ -68,66 +68,6 @@ def read_data_txt(dataset):
 
     return data
 
-
-def load_data_ppi(prefix='../data/ppi/ppi', normalize=True, load_walks=False):
-    G_data = json.load(open(prefix + "-G.json"))
-    G = json_graph.node_link_graph(G_data)
-    if isinstance(G.nodes()[0], int):
-        conversion = lambda n: int(n)
-    else:
-        conversion = lambda n: n
-
-    if os.path.exists(prefix + "-feats.npy"):
-        feats = np.load(prefix + "-feats.npy")
-    else:
-        print("No features present.. Only identity features will be used.")
-        feats = None
-    id_map = json.load(open(prefix + "-id_map.json"))
-    id_map = {conversion(k): int(v) for k, v in id_map.items()}
-    walks = []
-    class_map = json.load(open(prefix + "-class_map.json"))
-    if isinstance(list(class_map.values())[0], list):
-        lab_conversion = lambda n: n
-    else:
-        lab_conversion = lambda n: int(n)
-
-    class_map = {conversion(k): lab_conversion(v) for k, v in class_map.items()}
-
-    ## Remove all nodes that do not have val/test annotations
-    ## (necessary because of networkx weirdness with the Reddit data)
-    broken_count = 0
-    for node in G.nodes():
-        if not 'val' in G.node[node] or not 'test' in G.node[node]:
-            G.remove_node(node)
-            broken_count += 1
-    print("Removed {:d} nodes that lacked proper annotations due to networkx versioning issues".format(broken_count))
-
-    ## Make sure the graph has edge train_removed annotations
-    ## (some datasets might already have this..)
-    print("Loaded data.. now preprocessing..")
-    for edge in G.edges():
-        if (G.node[edge[0]]['val'] or G.node[edge[1]]['val'] or
-                G.node[edge[0]]['test'] or G.node[edge[1]]['test']):
-            G[edge[0]][edge[1]]['train_removed'] = True
-        else:
-            G[edge[0]][edge[1]]['train_removed'] = False
-
-    if normalize and not feats is None:
-        from sklearn.preprocessing import StandardScaler
-        train_ids = np.array([id_map[n] for n in G.nodes() if not G.node[n]['val'] and not G.node[n]['test']])
-        train_feats = feats[train_ids]
-        scaler = StandardScaler()
-        scaler.fit(train_feats)
-        feats = scaler.transform(feats)
-
-    if load_walks:
-        with open(prefix + "-walks.txt") as fp:
-            for line in fp:
-                walks.append(map(conversion, line.split()))
-
-    return G, feats, id_map, walks, class_map
-
-
 def acc_calculator(accs):
     n = len(accs)
     print('acc number: ', n)
@@ -147,6 +87,7 @@ def acc_calculator(accs):
 from scipy.io import loadmat
 
 def read_ppi():
+    print('reading ppi')
     res_graph=[]
     res_node_label=[]
     np.set_printoptions(suppress=True)
@@ -157,8 +98,8 @@ def read_ppi():
         temp=[]
         for j in data[0][i][1][0][0][0]:
             temp.append(j[0])
-        res_node_label.append(temp)
-    return res_graph,np.array(res_node_label)
+        res_node_label.append(np.array(temp))
+    return res_graph,res_node_label
 
 
 
@@ -168,5 +109,5 @@ def read_ppi_graph_label():
     with open('../data/PPIS/PPI_label.csv')as f:
         f_csv = csv.reader(f)
         for row in f_csv:
-            res.append(1) if int(row[0])=='1' else res.append(0)
+            res.append(1) if row[0]=='1' else res.append(0)
     return np.array(res)
