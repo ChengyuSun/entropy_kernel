@@ -199,7 +199,7 @@ def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
         #only graphlet count
         #graph_rep=np.append(graph_rep,np.array(summation[0]))
 
-        graph_rep_2 = np.append(graph_rep_2, np.array(summation[0]))
+        #graph_rep_2 = np.append(graph_rep_2, np.array(summation[0]))
 
 
     #print(graph_rep_2)
@@ -228,20 +228,28 @@ GRAPH_ID_SUFFIX = '_graph_indicator.txt'
 def dataset_reps(dataset):
     dataset_graph_reps = []
 
-    if dataset == 'PPI':
-        graphs,node_labels = util.read_ppi()
+    if dataset == 'PPI' or dataset=='PTC':
+        if dataset=='PPI':
+            graphs,node_labels = util.read_ppi()
+            N=86
+        else:
+            graphs, node_labels = util.read_ptc()
+            N=344
         node_label_all=[]
         for i in node_labels:
             for j in i:
                 node_label_all.append(j)
         min_label=min(node_label_all)
         max_label=max(node_label_all)
-        for i in range(86):
+        print('minlabel {}  maxlabel {}'.format(min_label,max_label))
+        for i in range(N):
             temp_A = graphs[i]
             temp_node_labels = node_labels[i]
             temp_nodN = len(temp_node_labels)
             temp_graph_rep = gen_graph_rep(temp_A, temp_nodN, temp_node_labels, min_label, max_label)
             dataset_graph_reps.append(temp_graph_rep)
+
+
     else:
         data=util.read_data_txt(dataset)
         graph_ids = set(data['_graph_indicator.txt'])
@@ -257,7 +265,7 @@ def dataset_reps(dataset):
 
 
         for g_id in set(graph_ids):
-            # print('正在处理图：' + str(g_id))
+            print('正在处理图：' + str(g_id))
             node_ids = np.argwhere(data['_graph_indicator.txt'] == g_id).squeeze()
             node_ids.sort()
 

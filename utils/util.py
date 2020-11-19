@@ -12,6 +12,8 @@ def read_graph_label(dataset):
     print('reading data labels...')
     if dataset=='PPI':
         return read_ppi_graph_label()
+    elif dataset=='PTC':
+        return read_ptc_labels()
     filename = '../data/{}/{}_graph_labels.txt'.format(dataset, dataset)
     graph_labels = np.loadtxt(filename, dtype=np.float, delimiter=',')
     return graph_labels
@@ -111,3 +113,42 @@ def read_ppi_graph_label():
         for row in f_csv:
             res.append(1) if row[0]=='1' else res.append(0)
     return np.array(res)
+
+def read_ptc():
+    graphs=[]
+    for i in range(1,345):
+        with open('../data/ptc/graph_'+str(i)+'.csv')as f:
+            graph=csv.reader(f)
+            temp_graph = []
+            for line in graph:
+                temp_line=[]
+                for item in line:
+                    s=0 if item=='0' else 1
+                    temp_line.append(s)
+                temp_graph.append(temp_line)
+            graphs.append(np.array(temp_graph))
+
+    labels=[]
+    for i in range(1, 345):
+        with open('../data/ptc/feature_' + str(i) + '.csv')as f:
+            fea = csv.reader(f)
+            node_labels=[]
+            for line in fea:
+                temp_label = 0
+                for item in line:
+                    if item=='1':
+                        break
+                    temp_label+=1
+                node_labels.append(temp_label)
+            #print(node_labels)
+            labels.append(np.array(node_labels))
+    return graphs,labels
+
+
+def read_ptc_labels():
+    labels = []
+    with open('../data/ptc/ptc_label.csv')as f2:
+        l = csv.reader(f2)
+        for row in l:
+            labels.append(1) if row[0] == '1' else labels.append(0)
+    return np.array(labels)

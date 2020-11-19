@@ -83,13 +83,16 @@ def graphlet_entropy(n):
     e = [1, 2, 2, 3, 3, 3, 3, 3]
     K = 1.0 / 100000
     T = 100.0
+
+    S=15000
+
     DELTA = 256
 
     beta = symbols('BETA')
     pi = 3.1415926
     Integral = sqrt(beta) * sqrt(pi) * DELTA
     Entropy = []
-    r = 27.0
+    r = 10
     Nm=len(n)
     for i in range(Nm):
         if n[i]==0:
@@ -99,6 +102,6 @@ def graphlet_entropy(n):
         logZ = n[i] * (-math.log(n[i]) + 1 + log(m_integral) - math.log(factorial(l[i%8])))
         U = diff(logZ, beta)
         E = logZ + U * beta
-        E = E.subs(beta, 1.0 / (K * T))
+        E = E.subs(beta, S)
         Entropy.append(float(E))
     return Entropy
