@@ -84,7 +84,7 @@ def graphlet_entropy(n):
     K = 1.0 / 100000
     T = 100.0
 
-    S=15000
+    S=1000
 
     DELTA = 256
 

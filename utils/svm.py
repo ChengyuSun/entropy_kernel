@@ -10,7 +10,7 @@ from sklearn import svm
 from utils.kPCA import js_kernel_process,select_level
 
 
-dataset='NCI1'
+dataset='PPI'
 original_features=dataset_reps(dataset)
 original_labels=read_graph_label(dataset)
 
@@ -79,7 +79,7 @@ def ten_ten_svm(l):
     #
     #
     features=select_level(original_features,l)
-    kernel_features=js_kernel_process(features)
+    #kernel_features=js_kernel_process(features)
     #
     #
     #

@@ -1,7 +1,5 @@
 import numpy as np
 import os
-import json
-from networkx.readwrite import json_graph
 
 
 def complete_path(folder, fname):

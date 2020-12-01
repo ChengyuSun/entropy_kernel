@@ -206,9 +206,14 @@ def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
 
 
     # log
-    graph_rep=graphlet_entropy(graph_rep.tolist())
+    # graph_rep=graphlet_entropy(graph_rep.tolist())
+    # for i in range(len(graph_rep)):
+    #     graph_rep[i]=math.log(graph_rep[i]+1,2)
+
+    #enhance
+    graph_rep = graphlet_entropy(graph_rep.tolist())
     for i in range(len(graph_rep)):
-        graph_rep[i]=math.log(graph_rep[i]+1,2)
+        graph_rep[i]=graph_rep[i]/2.75
 
     #print(graph_rep)
     # distribution
@@ -265,7 +270,7 @@ def dataset_reps(dataset):
 
 
         for g_id in set(graph_ids):
-            print('正在处理图：' + str(g_id))
+            #print('正在处理图：' + str(g_id))
             node_ids = np.argwhere(data['_graph_indicator.txt'] == g_id).squeeze()
             node_ids.sort()
 
