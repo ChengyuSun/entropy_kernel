@@ -2,6 +2,7 @@
 import numpy as np
 from scipy.spatial.distance import pdist, squareform
 from sklearn.decomposition import PCA
+from utils.DTW_kernel import dtw_distance
 import math
 
 
@@ -79,6 +80,32 @@ def js_kernel_process(input):
     # print('matrix: ', matrix.shape)
     matrix = np.append(id_vactor, matrix,axis=1)
 
+    return matrix
+
+import tslearn.metrics as metrics
+
+def GAK_process(input):
+    sample_num = len(input)
+    matrix = np.zeros((sample_num, sample_num), float)
+    for i in range(sample_num):
+        for j in range(sample_num):
+            matrix[i][j]=metrics.gak(input[i].tolist(), input[j].tolist(), sigma=2)
+    id_vactor = np.arange(1, sample_num + 1).reshape(sample_num, 1)
+    # print('id_vactor: ',id_vactor.shape)
+    # print('matrix: ', matrix.shape)
+    matrix = np.append(id_vactor, matrix, axis=1)
+    return matrix
+
+def dtw_process(input):
+    sample_num = len(input)
+    matrix = np.zeros((sample_num, sample_num), float)
+    for i in range(sample_num):
+        for j in range(sample_num):
+            matrix[i][j]=dtw_distance(input[i].tolist(), input[j].tolist())
+    id_vactor = np.arange(1, sample_num + 1).reshape(sample_num, 1)
+    # print('id_vactor: ',id_vactor.shape)
+    # print('matrix: ', matrix.shape)
+    matrix = np.append(id_vactor, matrix, axis=1)
     return matrix
 
 def select_level(input, level=8):

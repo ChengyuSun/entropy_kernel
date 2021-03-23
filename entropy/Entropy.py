@@ -84,7 +84,7 @@ def graphlet_entropy(n):
     K = 1.0 / 100000
     T = 100.0
 
-    S=1000
+    S=10000
 
     DELTA = 256
 
@@ -92,7 +92,7 @@ def graphlet_entropy(n):
     pi = 3.1415926
     Integral = sqrt(beta) * sqrt(pi) * DELTA
     Entropy = []
-    r = 10
+    r = 30
     Nm=len(n)
     for i in range(Nm):
         if n[i]==0:

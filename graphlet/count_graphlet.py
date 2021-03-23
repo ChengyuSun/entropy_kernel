@@ -175,7 +175,7 @@ def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
     # graphlet_of_graph=np.sum(graphlet_of_nodes,axis=0)
     # graph_entropy=np.array(graphlet_entropy(graphlet_of_graph.tolist()))
 
-    graph_rep_2=np.array([])
+    #graph_rep_2=np.array([])
     for temp_label in range(min_label,max_label+1):
         nodes_reps=graphlet_of_nodes[temp_node_labels==temp_label]
         if len(nodes_reps)==0:
@@ -208,12 +208,20 @@ def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
     # log
     # graph_rep=graphlet_entropy(graph_rep.tolist())
     # for i in range(len(graph_rep)):
-    #     graph_rep[i]=math.log(graph_rep[i]+1,2)
+    #     graph_rep[i]=math.log(graph_rep[i]+1,10)
 
     #enhance
-    graph_rep = graphlet_entropy(graph_rep.tolist())
-    for i in range(len(graph_rep)):
-        graph_rep[i]=graph_rep[i]/2.75
+    # graph_rep = graphlet_entropy(graph_rep.tolist())
+    # for i in range(len(graph_rep)):
+    #     graph_rep[i]=graph_rep[i]*10
+
+#  *2 80.125+-2.625  *3 83.75+-3.75  *4  83.25+-4.5 *5 83.875+-3.875
+#  *6 84.125+-3.375  *7 84.625+-2.875  *8 84.25+-5.5 *9 84.75+-2.25  *9.5 82.625+-2.6
+    #  *10 84.75+-4.75  *11  83.375+-4.125  *12 83.625+-3.625
+# *15  83.125+-3.125   *20 82.875+-4.125
+    # *100 84.25+-4.25  *1000 83.5+-4.75
+
+
 
     #print(graph_rep)
     # distribution

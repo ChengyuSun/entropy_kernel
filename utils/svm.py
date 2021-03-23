@@ -7,10 +7,10 @@ from utils.util import read_graph_label,acc_calculator
 import numpy as np
 import random
 from sklearn import svm
-from utils.kPCA import js_kernel_process,select_level
+from utils.kPCA import js_kernel_process,select_level,GAK_process,dtw_process
 
 
-dataset='PPI'
+dataset='COLLAB'
 original_features=dataset_reps(dataset)
 original_labels=read_graph_label(dataset)
 
@@ -41,6 +41,7 @@ def normal_svm(features,labels,train_idx,test_idx):
     return p_acc[0]
 
 def sklearn_svm(features,labels,train_idx,test_idx):
+    #print('starting training and testing sklearn_svm')
     clf_linear = svm.SVC(kernel='linear')
     #print('train_idx: ',train_idx)
     #print('features[train]: ',features[train_idx])
@@ -58,12 +59,12 @@ random_idx = [i for i in range(nodN)]
 random.shuffle(random_idx)
 for level in range(1,9):
     select_level_features=select_level(original_features,level)
-    #kernel_features = js_kernel_process(features, level)
+    #kernel_features = dtw_process(select_level_features)
     accs=[]
     for i in range(10):
         train_idx_temp, test_idx_temp = n_cross(10,i, nodN, random_idx)
         accs.append(sklearn_svm(select_level_features,original_labels,train_idx_temp,test_idx_temp))
-        #accs.append(kernel_svm(kernel_features,train_idx_temp,test_idx_temp))
+        #accs.append(kernel_svm(kernel_features,original_labels,train_idx_temp,test_idx_temp))
     avg=acc_calculator(accs)
     if avg>max_acc:
         max_level=level
@@ -79,7 +80,8 @@ def ten_ten_svm(l):
     #
     #
     features=select_level(original_features,l)
-    #kernel_features=js_kernel_process(features)
+    #kernel_features=dtw_process(features)
+
     #
     #
     #

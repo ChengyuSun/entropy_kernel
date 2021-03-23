@@ -14,8 +14,9 @@ from mpl_toolkits.mplot3d import Axes3D  # 空间三维画图
 from utils.util import read_graph_label
 from utils.kPCA import rbf_kpca
 from graphlet.count_graphlet import dataset_reps
+from sklearn.decomposition import PCA
 
-dataset='NCI1'
+dataset='MUTAG'
 
 
 graph_rep_matrix=dataset_reps(dataset)
@@ -24,7 +25,8 @@ print('before pca shape: ', graph_rep_matrix.shape)
 
 
 data1 = rbf_kpca(graph_rep_matrix, gamma=15, k=3)
-#data1 = pca(graph_rep_matrix, 3)
+# pca = PCA(n_components=3)
+# data1 = pca.fit_transform(graph_rep_matrix)
 #data1=graph_rep_matrix
 
 print(' after pca shape: ', data1.shape)
