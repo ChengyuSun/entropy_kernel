@@ -1,6 +1,7 @@
 path='../lib/libsvm-3.24/python'
 import sys
 sys.path.append(path)
+sys.path.append('../')
 from svmutil import *
 from graphlet.count_graphlet import dataset_reps
 from utils.util import read_graph_label,acc_calculator
@@ -9,12 +10,6 @@ import random
 from sklearn import svm
 from utils.kPCA import js_kernel_process,select_level,GAK_process,dtw_process
 
-
-dataset='COLLAB'
-original_features=dataset_reps(dataset)
-original_labels=read_graph_label(dataset)
-
-nodN=len(original_labels.tolist())
 
 def n_cross(n,index,nodN,random_idx):
 
@@ -53,24 +48,24 @@ def sklearn_svm(features,labels,train_idx,test_idx):
 
 
 #
-max_level=0
-max_acc=0
-random_idx = [i for i in range(nodN)]
-random.shuffle(random_idx)
-for level in range(1,9):
-    select_level_features=select_level(original_features,level)
-    #kernel_features = dtw_process(select_level_features)
-    accs=[]
-    for i in range(10):
-        train_idx_temp, test_idx_temp = n_cross(10,i, nodN, random_idx)
-        accs.append(sklearn_svm(select_level_features,original_labels,train_idx_temp,test_idx_temp))
-        #accs.append(kernel_svm(kernel_features,original_labels,train_idx_temp,test_idx_temp))
-    avg=acc_calculator(accs)
-    if avg>max_acc:
-        max_level=level
-        max_acc=avg
-print('\n\n\n\ndataset: {}   acc: {}  best_level: {}'.format(dataset,max_acc,max_level))
-print('\n\n\n\n\n')
+# max_level=0
+# max_acc=0
+# random_idx = [i for i in range(nodN)]
+# random.shuffle(random_idx)
+# for level in range(1,9):
+#     select_level_features=select_level(original_features,level)
+#     #kernel_features = dtw_process(select_level_features)
+#     accs=[]
+#     for i in range(10):
+#         train_idx_temp, test_idx_temp = n_cross(10,i, nodN, random_idx)
+#         accs.append(sklearn_svm(select_level_features,original_labels,train_idx_temp,test_idx_temp))
+#         #accs.append(kernel_svm(kernel_features,original_labels,train_idx_temp,test_idx_temp))
+#     avg=acc_calculator(accs)
+#     if avg>max_acc:
+#         max_level=level
+#         max_acc=avg
+# print('\n\n\n\ndataset: {}   acc: {}  best_level: {}'.format(dataset,max_acc,max_level))
+# print('\n\n\n\n\n')
 
 
 
@@ -106,4 +101,13 @@ def ten_ten_svm(l):
     print('dataset: ',dataset)
     acc_calculator(accs)
 
-ten_ten_svm(max_level)
+
+
+
+dataset='IMDB-BINARY'
+is_server=False
+original_features=dataset_reps(dataset,is_server)
+original_labels=read_graph_label(dataset,is_server)
+nodN=len(original_labels.tolist())
+
+ten_ten_svm(8)

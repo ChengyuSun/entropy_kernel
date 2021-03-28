@@ -193,6 +193,8 @@ def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
 
 
         #simple graphlet entropy
+        # print(summation[0])
+        # print()
         temp_entropy = graphlet_entropy(summation[0])
         graph_rep = np.append(graph_rep, np.array(temp_entropy))
 
@@ -238,7 +240,7 @@ ADJACENCY_SUFFIX = '_A.txt'
 GRAPH_ID_SUFFIX = '_graph_indicator.txt'
 
 
-def dataset_reps(dataset):
+def dataset_reps(dataset,is_server):
     dataset_graph_reps = []
 
     if dataset == 'PPI' or dataset=='PTC':
@@ -264,7 +266,7 @@ def dataset_reps(dataset):
 
 
     else:
-        data=util.read_data_txt(dataset)
+        data=util.read_data_txt(dataset,is_server)
         graph_ids = set(data['_graph_indicator.txt'])
         min_label=min(data[NODE_LABELS_SUFFIX])
         max_label = max(data[NODE_LABELS_SUFFIX])

@@ -6,13 +6,16 @@ def complete_path(folder, fname):
     return os.path.join(folder, fname)
 
 
-def read_graph_label(dataset):
+def read_graph_label(dataset,is_server):
     print('reading data labels...')
     if dataset=='PPI':
         return read_ppi_graph_label()
     elif dataset=='PTC':
         return read_ptc_labels()
-    filename = '../data/{}/{}_graph_labels.txt'.format(dataset, dataset)
+    if is_server:
+        filename = '/new_disk_B/scy/{}/{}_graph_labels.txt'.format(dataset, dataset)
+    else:
+        filename = '../data/{}/{}_graph_labels.txt'.format(dataset, dataset)
     graph_labels = np.loadtxt(filename, dtype=np.float, delimiter=',')
     return graph_labels
 
@@ -49,11 +52,13 @@ def read_data(filename):
     return matrix
 
 
-def read_data_txt(dataset):
+def read_data_txt(dataset,is_server):
     data = dict()
     dataset_name = str(dataset)
-    # dirpath = '/new_disk_B/scy/{}'.format(dataset_name)
-    dirpath = '../data/{}'.format(dataset_name)
+    if is_server:
+        dirpath = '/new_disk_B/scy/{}'.format(dataset_name)
+    else:
+        dirpath = '../data/{}'.format(dataset_name)
     print('reading data...')
     for f in os.listdir(dirpath):
         if "README" in f or '.txt' not in f:
