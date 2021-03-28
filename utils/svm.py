@@ -31,7 +31,6 @@ def kernel_svm(kernel_values,labels,train_idx,test_idx):
 
 def normal_svm(features,labels,train_idx,test_idx):
     model = svm_train(labels[train_idx].tolist(), features[train_idx].tolist(), '-c 4')
-    print("result:")
     p_label, p_acc, p_val = svm_predict(labels[test_idx].tolist(), features[test_idx].tolist(), model)
     return p_acc[0]
 
@@ -88,7 +87,7 @@ def ten_ten_svm(l):
         for i in range(10):
             train_idx_temp, test_idx_temp = n_cross(10, i, nodN, random_idx)
             print('ready for {}:{}'.format(k,i))
-            temp_score=sklearn_svm(features,original_labels,train_idx_temp,test_idx_temp)
+            temp_score=normal_svm(features,original_labels,train_idx_temp,test_idx_temp)
             print('{}:{}  score is {}'.format(k,i,temp_score))
             temp_accs.append(temp_score)
             #temp_accs.append(kernel_svm(kernel_features, original_labels,train_idx_temp, test_idx_temp))
@@ -107,7 +106,7 @@ def ten_ten_svm(l):
 
 
 
-dataset='IMDB-BINARY'
+dataset='IMDB-MULTI'
 is_server=False
 original_features=dataset_reps(dataset,is_server)
 original_labels=read_graph_label(dataset,is_server)
