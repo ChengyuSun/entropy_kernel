@@ -87,7 +87,10 @@ def ten_ten_svm(l):
         random.shuffle(random_idx)
         for i in range(10):
             train_idx_temp, test_idx_temp = n_cross(10, i, nodN, random_idx)
-            temp_accs.append(sklearn_svm(features,original_labels,train_idx_temp,test_idx_temp))
+            print('ready for {}:{}'.format(k,i))
+            temp_score=sklearn_svm(features,original_labels,train_idx_temp,test_idx_temp)
+            print('{}:{}  score is {}'.format(k,i,temp_score))
+            temp_accs.append(temp_score)
             #temp_accs.append(kernel_svm(kernel_features, original_labels,train_idx_temp, test_idx_temp))
         temp_res=acc_calculator(temp_accs)
         print('\n------temp_res: {} -------\n'.format(format(temp_res,'.2f')))
