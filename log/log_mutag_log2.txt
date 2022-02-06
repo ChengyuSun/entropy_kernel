@@ -1,0 +1,44 @@
+dataset:MUTAG  KT:0.001  r:0.1  log:0.02  normalize:True 
+	 kernel:linear  avg:79.278   dis:2.056
+dataset:MUTAG  KT:0.001  r:0.1  log:0.2  normalize:True 
+	 kernel:linear  avg:81.778   dis:1.222
+dataset:MUTAG  KT:0.001  r:0.1  log:2  normalize:True 
+	 kernel:linear  avg:79.444   dis:1.667
+dataset:MUTAG  KT:0.001  r:0.1  log:5  normalize:True 
+	 kernel:linear  avg:81.611   dis:1.167
+dataset:MUTAG  KT:0.001  r:0.1  log:10  normalize:True 
+	 kernel:linear  avg:82.111   dis:1.778
+dataset:MUTAG  KT:0.001  r:0.1  log:15  normalize:True 
+	 kernel:linear  avg:81.278   dis:1.278
+dataset:MUTAG  KT:0.001  r:0.1  log:20  normalize:True 
+	 kernel:linear  avg:82.000   dis:1.889
+dataset:MUTAG  KT:0.001  r:0.1  log:50  normalize:True 
+	 kernel:linear  avg:78.500   dis:2.611
+dataset:MUTAG  KT:0.001  r:0.1  log:100  normalize:True 
+	 kernel:linear  avg:76.167   dis:2.278
+dataset:MUTAG  KT:0.001  r:0.1  log:500  normalize:True 
+	 kernel:linear  avg:69.444   dis:2.778
+dataset:MUTAG  KT:0.001  r:0.1  log:1000  normalize:True 
+	 kernel:linear  avg:70.111   dis:2.111
+dataset:MUTAG  KT:0.001  r:0.1  log:0.02  normalize:False 
+	 kernel:linear  avg:85.611   dis:3.389
+dataset:MUTAG  KT:0.001  r:0.1  log:0.2  normalize:False 
+	 kernel:linear  avg:86.667   dis:2.222
+dataset:MUTAG  KT:0.001  r:0.1  log:2  normalize:False 
+	 kernel:linear  avg:88.167   dis:3.500
+dataset:MUTAG  KT:0.001  r:0.1  log:5  normalize:False 
+	 kernel:linear  avg:86.667   dis:1.667
+dataset:MUTAG  KT:0.001  r:0.1  log:10  normalize:False 
+	 kernel:linear  avg:86.833   dis:2.611
+dataset:MUTAG  KT:0.001  r:0.1  log:15  normalize:False 
+	 kernel:linear  avg:85.389   dis:1.500
+dataset:MUTAG  KT:0.001  r:0.1  log:20  normalize:False 
+	 kernel:linear  avg:85.056   dis:2.722
+dataset:MUTAG  KT:0.001  r:0.1  log:50  normalize:False 
+	 kernel:linear  avg:85.389   dis:2.389
+dataset:MUTAG  KT:0.001  r:0.1  log:100  normalize:False 
+	 kernel:linear  avg:85.833   dis:1.944
+dataset:MUTAG  KT:0.001  r:0.1  log:500  normalize:False 
+	 kernel:linear  avg:83.222   dis:2.333
+dataset:MUTAG  KT:0.001  r:0.1  log:1000  normalize:False 
+	 kernel:linear  avg:81.944   dis:2.500
