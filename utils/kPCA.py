@@ -47,7 +47,6 @@ def pca(origin_matrix, target_dim):
     pca = PCA(n_components=target_dim)
     pca.fit(origin_matrix)
     newX = pca.fit_transform(origin_matrix)  # 降维后的数据
-    # PCA(copy=True, n_components=2, whiten=False)
     return newX
 
 
@@ -82,19 +81,19 @@ def js_kernel_process(input):
 
     return matrix
 
-import tslearn.metrics as metrics
+# import tslearn.metrics as metrics
 
-def GAK_process(input):
-    sample_num = len(input)
-    matrix = np.zeros((sample_num, sample_num), float)
-    for i in range(sample_num):
-        for j in range(sample_num):
-            matrix[i][j]=metrics.gak(input[i].tolist(), input[j].tolist(), sigma=2)
-    id_vactor = np.arange(1, sample_num + 1).reshape(sample_num, 1)
-    # print('id_vactor: ',id_vactor.shape)
-    # print('matrix: ', matrix.shape)
-    matrix = np.append(id_vactor, matrix, axis=1)
-    return matrix
+# def GAK_process(input):
+#     sample_num = len(input)
+#     matrix = np.zeros((sample_num, sample_num), float)
+#     for i in range(sample_num):
+#         for j in range(sample_num):
+#             matrix[i][j]=metrics.gak(input[i].tolist(), input[j].tolist(), sigma=2)
+#     id_vactor = np.arange(1, sample_num + 1).reshape(sample_num, 1)
+#     # print('id_vactor: ',id_vactor.shape)
+#     # print('matrix: ', matrix.shape)
+#     matrix = np.append(id_vactor, matrix, axis=1)
+#     return matrix
 
 def dtw_process(input):
     sample_num = len(input)

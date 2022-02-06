@@ -1,0 +1,1 @@
+from .count_motif import allocate

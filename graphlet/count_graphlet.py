@@ -1,7 +1,15 @@
+import sys
+# print(sys.path)
+sys.path.append('../utis')
+sys.path.append('../graphlet')
+from numpy.lib.function_base import gradient
+
 import copy
+from os import linesep
 import numpy as np
 import utils.util as util
 from entropy.Entropy import graphlet_entropy
+from graphlet.count_motif import allocate
 import math
 
 class GraphletCoder:
@@ -113,7 +121,6 @@ def graphlet_diffuse(start_index,adj_original,node_labels,graphlet_coder):
     return np.array(node_rep)
 
 def graphlet_diffuse_no_label(start_index,adj_original):
-
     node_rep=[0 for i in range(8)]
 
     neighbors_1=np.nonzero(adj_original[start_index])[0].tolist()
@@ -172,66 +179,54 @@ def gen_graph_rep(adj_original,nodN,temp_node_labels,min_label,max_label):
     graphlet_of_nodes=np.array(graphlet_of_nodes)
     _,dim=graphlet_of_nodes.shape
 
-    # graphlet_of_graph=np.sum(graphlet_of_nodes,axis=0)
-    # graph_entropy=np.array(graphlet_entropy(graphlet_of_graph.tolist()))
-
-    #graph_rep_2=np.array([])
     for temp_label in range(min_label,max_label+1):
         nodes_reps=graphlet_of_nodes[temp_node_labels==temp_label]
         if len(nodes_reps)==0:
             summation=np.zeros((1,dim))
         else:
             summation=np.sum(nodes_reps,axis=0).reshape(1,dim)
-
-        #allocate(complex) graphlet entropy
-        # temp_entropy=[]
-        # for j in range(dim):
-        #     if graphlet_of_graph[j]==0:
-        #         temp_entropy.append(0)
-        #     else:
-        #         temp_entropy.append(graph_entropy[j]*summation[0][j]/graphlet_of_graph[j])
-
-
-        #simple graphlet entropy
-        # print(summation[0])
-        # print()
         temp_entropy = graphlet_entropy(summation[0])
         graph_rep = np.append(graph_rep, np.array(temp_entropy))
 
-        #only graphlet count
-        #graph_rep=np.append(graph_rep,np.array(summation[0]))
-
-        #graph_rep_2 = np.append(graph_rep_2, np.array(summation[0]))
-
-
-    #print(graph_rep_2)
-
 
     # log
-    # graph_rep=graphlet_entropy(graph_rep.tolist())
-    # for i in range(len(graph_rep)):
-    #     graph_rep[i]=math.log(graph_rep[i]+1,10)
+    #log10-84 2-85
+    graph_rep=graphlet_entropy(graph_rep.tolist())
+    for i in range(len(graph_rep)):
+        graph_rep[i]=math.log(graph_rep[i]+1,3)
 
     #enhance
     # graph_rep = graphlet_entropy(graph_rep.tolist())
     # for i in range(len(graph_rep)):
     #     graph_rep[i]=graph_rep[i]*10
 
-#  *2 80.125+-2.625  *3 83.75+-3.75  *4  83.25+-4.5 *5 83.875+-3.875
-#  *6 84.125+-3.375  *7 84.625+-2.875  *8 84.25+-5.5 *9 84.75+-2.25  *9.5 82.625+-2.6
-    #  *10 84.75+-4.75  *11  83.375+-4.125  *12 83.625+-3.625
-# *15  83.125+-3.125   *20 82.875+-4.125
-    # *100 84.25+-4.25  *1000 83.5+-4.75
-
-
-
-    #print(graph_rep)
-    # distribution
-    # sum_entropy=sum(graph_rep)
-    # for i in range(len(graph_rep)):
-    #     graph_rep[i]=graph_rep[i]/sum_entropy
     return np.array(graph_rep)
 
+
+def graph_representation(node_in_graphlet,node_labels,min_label,max_label,kt,r,log_value,graphlet_normalize):
+    graph_rep=np.array([])
+    node_num,graphlet_type=node_in_graphlet.shape
+    for label in range(min_label,max_label+1):
+        nodes_reps=node_in_graphlet[node_labels==label]
+        if len(nodes_reps)==0:
+            summation=np.zeros((graphlet_type),int)
+        else:
+            summation=np.sum(nodes_reps,axis=0)
+        
+        if graphlet_normalize:
+            if not sum(summation)==0:
+                summation=[i/sum(summation) for i in summation]
+    
+        temp_entropy = graphlet_entropy(summation,kt,r)
+        for i in range(len(temp_entropy)):
+            if temp_entropy[i]>0:
+                temp_entropy[i]=math.log(temp_entropy[i],log_value) 
+            else:
+                temp_entropy[i]=0
+        graph_rep = np.append(graph_rep, np.array(temp_entropy))
+    
+        # graph_rep[i]=
+    return graph_rep
 
 
 GRAPH_LABELS_SUFFIX = '_graph_labels.txt'
@@ -240,64 +235,76 @@ ADJACENCY_SUFFIX = '_A.txt'
 GRAPH_ID_SUFFIX = '_graph_indicator.txt'
 
 
-def dataset_reps(dataset,is_server):
+def dataset_reps(dataset,kt,r,log_value,graphlet_normalize):
     dataset_graph_reps = []
+    data=util.read_data_txt(dataset)
+    graph_ids = set(data['_graph_indicator.txt'])
+    min_label=min(data[NODE_LABELS_SUFFIX])
+    max_label = max(data[NODE_LABELS_SUFFIX])
 
-    if dataset == 'PPI' or dataset=='PTC':
-        if dataset=='PPI':
-            graphs,node_labels = util.read_ppi()
-            N=86
+    node_label_num =  max_label-min_label + 1
+    print('node labels number: ', node_label_num)
+
+    adj = data[ADJACENCY_SUFFIX]
+    edge_in_graphlet=data['_edge_in_graphlet.txt'] #PGD algorithm 
+    edge_index_1=edge_index_2 = 0
+    node_index_begin= 0
+    graphlet_type_PGD=len(edge_in_graphlet[0])-2
+    for g_id in set(graph_ids):
+        print('正在处理图：' + str(g_id))
+        node_ids = np.argwhere(data['_graph_indicator.txt'] == g_id).squeeze()
+        node_ids.sort()
+        temp_nodN = len(node_ids)
+        temp_A = np.zeros([temp_nodN, temp_nodN], int) #init temp Adj
+        temp_node_in_graphlet=np.zeros((temp_nodN,graphlet_type_PGD),int)
+        if dataset=='PROTEINS' or dataset=='NCI1':
+            if dataset=='NCI1':
+                edge_in_graphlet = np.loadtxt('/new_disk_B/scy/NCI1_individual_graphlet/NCI1_graphlet_{}.txt'.format(g_id), dtype=np.int, delimiter=',')
+            else:
+                edge_in_graphlet = np.loadtxt('/new_disk_B/scy/delete/proteins_file/PROTEINS_graphlet_{}.txt'.format(g_id), dtype=np.int, delimiter=',')
+            for line in edge_in_graphlet:
+                graphlet_of_edge=line[2:]
+                temp_node_in_graphlet[line[0]-1]+=graphlet_of_edge
+                temp_node_in_graphlet[line[1]-1]+=graphlet_of_edge
+
         else:
-            graphs, node_labels = util.read_ptc()
-            N=344
-        node_label_all=[]
-        for i in node_labels:
-            for j in i:
-                node_label_all.append(j)
-        min_label=min(node_label_all)
-        max_label=max(node_label_all)
-        print('minlabel {}  maxlabel {}'.format(min_label,max_label))
-        for i in range(N):
-            temp_A = graphs[i]
-            temp_node_labels = node_labels[i]
-            temp_nodN = len(temp_node_labels)
-            temp_graph_rep = gen_graph_rep(temp_A, temp_nodN, temp_node_labels, min_label, max_label)
-            dataset_graph_reps.append(temp_graph_rep)
+            while (edge_index_1 < len(edge_in_graphlet)) and (edge_in_graphlet[edge_index_1][0] - 1 in node_ids):
+                line=edge_in_graphlet[edge_index_1]
+                edge_index_1 += 1
+                if line[1]-1 not in node_ids:
+                    continue
+                graphlet_of_edge=line[2:]
+                temp_node_in_graphlet[line[0]-1-node_index_begin]+=graphlet_of_edge
+                temp_node_in_graphlet[line[1]-1-node_index_begin]+=graphlet_of_edge
 
-
-    else:
-        data=util.read_data_txt(dataset,is_server)
-        graph_ids = set(data['_graph_indicator.txt'])
-        min_label=min(data[NODE_LABELS_SUFFIX])
-        max_label = max(data[NODE_LABELS_SUFFIX])
-        node_label_num =  max_label-min_label + 1
-        print('node labels number: ', node_label_num)
-
-        adj = data[ADJACENCY_SUFFIX]
-        edge_index = 0
-        node_index_begin = 0
-
-
-
-        for g_id in set(graph_ids):
-            #print('正在处理图：' + str(g_id))
-            node_ids = np.argwhere(data['_graph_indicator.txt'] == g_id).squeeze()
-            node_ids.sort()
-
-            temp_nodN = len(node_ids)
-            temp_A = np.zeros([temp_nodN, temp_nodN], int)
-            while (edge_index < len(adj)) and (adj[edge_index][0] - 1 in node_ids):
-                temp_A[adj[edge_index][0] - 1 - node_index_begin][adj[edge_index][1] - 1 - node_index_begin] = 1
-                edge_index += 1
-
-            temp_node_labels = data[NODE_LABELS_SUFFIX][node_index_begin:node_index_begin + temp_nodN]
-
-            temp_graph_rep = gen_graph_rep(temp_A, temp_nodN, temp_node_labels, min_label, max_label)
-            dataset_graph_reps.append(temp_graph_rep)
-
-            node_index_begin += temp_nodN
+        while (edge_index_2<len(adj)) and (adj[edge_index_2][0]-1 in node_ids):
+            e1=adj[edge_index_2][0]-1-node_index_begin
+            e2=adj[edge_index_2][1]-1-node_index_begin
+            temp_A[e1][e2]=temp_A[e2][e1]=1
+            edge_index_2+=1
+        
+        node_in_motif_ax=allocate(temp_A)
+        temp_node_in_graphlet=np.append(temp_node_in_graphlet,node_in_motif_ax,axis=1)
+        temp_node_labels = data[NODE_LABELS_SUFFIX][node_index_begin:node_index_begin + temp_nodN]
+        temp_graph_rep=graph_representation(temp_node_in_graphlet,temp_node_labels,min_label,max_label,kt,r,log_value,graphlet_normalize)
+        dataset_graph_reps.append(temp_graph_rep)
+        node_index_begin += temp_nodN
 
 
     return np.array(dataset_graph_reps)
 
-
+def dataset_reps_financial():
+    graph_num=5976
+    node_num=347
+    # graphlet_type_PGD=8
+    res=[]
+    for graph_id in range(1,graph_num+1):
+        print('graph id:',graph_id)
+        # temp_A=np.loadtxt('/new_disk_B/scy/financial/financial_A_{}.txt'.format(graph_id),dtype=np.int,delimiter=',')
+        edge_in_graphlet = np.loadtxt('/new_disk_B/scy/financial/financial_graphlet_{}.txt'.format(graph_id), dtype=np.int, delimiter=',')
+        temp_graph_rep=np.sum(edge_in_graphlet,0)[2:]
+        res.append(temp_graph_rep)
+    np.savetxt('/new_disk_B/scy/financial/graph_reps.txt',np.array(res),fmt='%d')
+       
+        
+    

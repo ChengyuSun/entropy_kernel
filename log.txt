@@ -1,0 +1,68 @@
+dataset:MUTAG  KT:0.0001   r:300
+	 kernel:linear  normalize:False   avg:82.778   dis:3.889
+dataset:MUTAG  KT:0.001   r:300
+	 kernel:linear  normalize:False   avg:83.056   dis:3.056
+dataset:MUTAG  KT:0.01   r:300
+	 kernel:linear  normalize:False   avg:86.056   dis:1.722
+dataset:MUTAG  KT:0.1   r:300
+	 kernel:linear  normalize:False   avg:86.278   dis:2.611
+dataset:MUTAG  KT:1   r:300
+	 kernel:linear  normalize:False   avg:85.889   dis:3.667
+dataset:MUTAG  KT:10   r:300
+	 kernel:linear  normalize:False   avg:84.000   dis:2.667
+dataset:MUTAG  KT:100   r:300
+	 kernel:linear  normalize:False   avg:85.667   dis:2.889
+dataset:MUTAG  KT:1000   r:300
+	 kernel:linear  normalize:False   avg:85.167   dis:1.278
+dataset:MUTAG  KT:10000   r:300
+	 kernel:linear  normalize:False   avg:85.444   dis:1.778
+dataset:MUTAG  KT:100000   r:300
+	 kernel:linear  normalize:False   avg:86.389   dis:1.944
+dataset:MUTAG  KT:1000000   r:300
+	 kernel:linear  normalize:False   avg:85.278   dis:2.500
+dataset:PTC  KT:0.0001   r:300
+	 kernel:rbf  normalize:True   avg:58.882   dis:3.000
+dataset:PTC  KT:0.001   r:300
+	 kernel:rbf  normalize:True   avg:58.824   dis:2.353
+dataset:PTC  KT:0.01   r:300
+	 kernel:rbf  normalize:True   avg:58.735   dis:1.971
+dataset:PTC  KT:0.1   r:300
+	 kernel:rbf  normalize:True   avg:59.412   dis:2.059
+dataset:PTC  KT:1   r:300
+	 kernel:rbf  normalize:True   avg:58.029   dis:2.853
+dataset:PTC  KT:10   r:300
+	 kernel:rbf  normalize:True   avg:59.206   dis:2.441
+dataset:PTC  KT:100   r:300
+	 kernel:rbf  normalize:True   avg:58.500   dis:2.676
+dataset:PTC  KT:1000   r:300
+	 kernel:rbf  normalize:True   avg:59.353   dis:2.706
+dataset:PTC  KT:10000   r:300
+	 kernel:rbf  normalize:True   avg:59.206   dis:1.971
+dataset:PTC  KT:100000   r:300
+	 kernel:rbf  normalize:True   avg:58.824   dis:1.471
+dataset:PTC  KT:1000000   r:300
+	 kernel:rbf  normalize:True   avg:59.647   dis:1.412
+dataset:PTC  KT:10000   r:1e-05
+	 kernel:rbf  normalize:True   avg:59.059   dis:2.412
+dataset:PTC  KT:10000   r:0.0001
+	 kernel:rbf  normalize:True   avg:58.147   dis:1.971
+dataset:PTC  KT:10000   r:0.001
+	 kernel:rbf  normalize:True   avg:58.529   dis:2.647
+dataset:PTC  KT:10000   r:0.01
+	 kernel:rbf  normalize:True   avg:58.471   dis:2.412
+dataset:PTC  KT:10000   r:0.1
+	 kernel:rbf  normalize:True   avg:61.353   dis:1.059
+dataset:PTC  KT:10000   r:1
+	 kernel:rbf  normalize:True   avg:59.147   dis:2.676
+dataset:PTC  KT:10000   r:10
+	 kernel:rbf  normalize:True   avg:58.676   dis:2.794
+dataset:PTC  KT:10000   r:100
+	 kernel:rbf  normalize:True   avg:58.735   dis:2.559
+dataset:PTC  KT:10000   r:1000
+	 kernel:rbf  normalize:True   avg:59.000   dis:2.824
+dataset:PTC  KT:10000   r:10000
+	 kernel:rbf  normalize:True   avg:58.794   dis:2.324
+dataset:PTC  KT:10000   r:100000
+	 kernel:rbf  normalize:True   avg:58.971   dis:1.912
+dataset:PPIs  KT:10000   r:1e-05
+dataset:PPIs  KT:10000   r:1e-05

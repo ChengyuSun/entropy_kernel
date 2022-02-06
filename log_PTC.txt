@@ -1,0 +1,56 @@
+dataset:PTC  KT:10000  r:0.1  log:0.02  normalize:False 
+	 kernel:rbf  avg:58.088   dis:1.912
+dataset:PTC  KT:10000  r:0.1  log:0.2  normalize:False 
+	 kernel:rbf  avg:57.118   dis:2.706
+dataset:PTC  KT:10000  r:0.1  log:2  normalize:False 
+	 kernel:rbf  avg:57.912   dis:2.324
+dataset:PTC  KT:10000  r:0.1  log:5  normalize:False 
+dataset:PTC  KT:10000  r:0.1  log:0.02  normalize:True 
+dataset:PTC  KT:10000  r:0.1  log:0.02  normalize:True 
+dataset:PTC  KT:10000  r:0.1  log:0.02  normalize:True 
+dataset:PTC  KT:10000  r:0.1  log:0.02  normalize:True 
+dataset:PTC  KT:10000  r:0.1  log:0.02  normalize:True 
+	 kernel:rbf  avg:57.059   dis:1.765
+dataset:PTC  KT:10000  r:0.1  log:0.2  normalize:True 
+	 kernel:rbf  avg:57.029   dis:2.324
+dataset:PTC  KT:10000  r:0.1  log:2  normalize:True 
+	 kernel:rbf  avg:56.353   dis:2.471
+dataset:PTC  KT:10000  r:0.1  log:5  normalize:True 
+	 kernel:rbf  avg:56.912   dis:2.206
+dataset:PTC  KT:10000  r:0.1  log:10  normalize:True 
+	 kernel:rbf  avg:56.882   dis:2.176
+dataset:PTC  KT:10000  r:0.1  log:15  normalize:True 
+	 kernel:rbf  avg:56.735   dis:2.971
+dataset:PTC  KT:10000  r:0.1  log:20  normalize:True 
+	 kernel:rbf  avg:56.294   dis:2.176
+dataset:PTC  KT:10000  r:0.1  log:50  normalize:True 
+	 kernel:rbf  avg:56.971   dis:3.618
+dataset:PTC  KT:10000  r:0.1  log:100  normalize:True 
+	 kernel:rbf  avg:56.353   dis:2.824
+dataset:PTC  KT:10000  r:0.1  log:500  normalize:True 
+	 kernel:rbf  avg:57.088   dis:1.794
+dataset:PTC  KT:10000  r:0.1  log:1000  normalize:True 
+	 kernel:rbf  avg:56.618   dis:2.794
+dataset:PTC  KT:10000  r:0.1  log:0.02  normalize:False 
+	 kernel:rbf  avg:57.971   dis:2.088
+dataset:PTC  KT:10000  r:0.1  log:0.2  normalize:False 
+	 kernel:rbf  avg:57.794   dis:1.618
+dataset:PTC  KT:10000  r:0.1  log:2  normalize:False 
+	 kernel:rbf  avg:58.088   dis:2.206
+dataset:PTC  KT:10000  r:0.1  log:5  normalize:False 
+	 kernel:rbf  avg:58.176   dis:1.529
+dataset:PTC  KT:10000  r:0.1  log:10  normalize:False 
+	 kernel:rbf  avg:57.029   dis:2.088
+dataset:PTC  KT:10000  r:0.1  log:15  normalize:False 
+	 kernel:rbf  avg:57.706   dis:2.706
+dataset:PTC  KT:10000  r:0.1  log:20  normalize:False 
+	 kernel:rbf  avg:58.029   dis:3.029
+dataset:PTC  KT:10000  r:0.1  log:50  normalize:False 
+	 kernel:rbf  avg:57.735   dis:1.853
+dataset:PTC  KT:10000  r:0.1  log:100  normalize:False 
+	 kernel:rbf  avg:58.206   dis:2.912
+dataset:PTC  KT:10000  r:0.1  log:500  normalize:False 
+	 kernel:rbf  avg:57.853   dis:1.971
+dataset:PTC  KT:10000  r:0.1  log:1000  normalize:False 
+	 kernel:rbf  avg:58.147   dis:1.853
+dataset:DD  KT:10000  r:0.1  log:0.02  normalize:False 
